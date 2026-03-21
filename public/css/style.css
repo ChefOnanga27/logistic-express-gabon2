@@ -219,6 +219,7 @@ ul { list-style: none; }
 .service-card.featured h3, .service-card.featured p { color: rgba(255,255,255,0.9); }
 .service-card.featured .service-link { color: var(--primary-yellow); }
 .service-icon { width: 60px; height: 60px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; }
+.service-card-image { width: 100%; height: 155px; border-radius: var(--radius); overflow: hidden; margin-bottom: 16px; background-position: center; background-size: cover; background-repeat: no-repeat; }
 .service-card h3 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--primary-blue); margin-bottom: 10px; }
 .service-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
 .service-link { color: var(--primary-blue-light); font-family: var(--font-display); font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: gap 0.2s; }
@@ -252,6 +253,63 @@ ul { list-style: none; }
 .province-card i { color: var(--primary-blue); font-size: 1.3rem; width: 24px; }
 .province-card strong { display: block; font-weight: 700; color: var(--primary-blue); font-size: 0.95rem; }
 .province-card span { font-size: 0.82rem; color: var(--text-muted); }
+
+/* ============================
+   GLOBAL COVERAGE / SOLAR ORBIT FLAGS
+   ============================ */
+.global-coverage-section { background: linear-gradient(135deg, rgba(3, 34, 75, 0.85), rgba(0, 0, 0, 0.75)); color: white; position: relative; }
+.global-coverage-section::before { content: ''; position: absolute; inset: 0; background: rgba(3, 34, 75, 0.25); }
+.global-coverage-section .container { position: relative; z-index: 2; }
+.global-coverage-inner { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 20px 0 10px; }
+.global-coverage-text { flex: 1; min-width: 280px; max-width: 480px; color: white; }
+.global-coverage-text h3 { color: #fff; font-family: var(--font-display); font-size: 1.9rem; font-weight: 800; margin-bottom: 14px; }
+.global-coverage-text p { color: rgba(255,255,255,0.92); line-height: 1.6; margin-bottom: 14px; }
+.global-coverage-text ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.global-coverage-text ul li { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 10px 12px; color: #f0f8ff; font-size: 0.94rem; }
+.orbit-layout { flex: 1; min-width: 280px; max-width: 520px; position: relative; aspect-ratio: 1 / 1; display: grid; place-items: center; }
+.orbit-core { position: absolute; z-index: 4; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.flag-core { width: 90px; height: 90px; border-radius: 50%; display: grid; place-items: center; font-size: 2.8rem; background: rgba(255,255,255,0.92); color: #0f4e26; border: 3px solid #1a3a7c; box-shadow: 0 8px 24px rgba(0,0,0,0.28); }
+.orbit-core span { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; font-size: 0.85rem; }
+.orbit { position: absolute; inset: 0; border-radius: 50%; border: 1px dashed rgba(255,255,255,0.35); }
+.orbit-1 { transform: scale(0.60); }
+.orbit-2 { transform: scale(0.74); }
+.orbit-3 { transform: scale(0.88); }
+.orbit-planet { position: absolute; width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.95); border: 1px solid rgba(26,58,124,0.2); display: grid; place-items: center; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.22); animation: spinPlanets 18s linear infinite; }
+.orbit-planet img { width: 100%; height: 100%; object-fit: cover; }
+.orbit-planet::after { content: attr(title); position: absolute; top: 70px; left: 50%; transform: translateX(-50%); font-size: 0.72rem; color: white; white-space: nowrap; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+.p1 { transform: rotate(0deg) translateX(190px); animation-duration: 20s; }
+.p2 { transform: rotate(52deg) translateX(210px); animation-duration: 22s; }
+.p3 { transform: rotate(104deg) translateX(230px); animation-duration: 19s; }
+.p4 { transform: rotate(156deg) translateX(195px); animation-duration: 24s; }
+.p5 { transform: rotate(208deg) translateX(215px); animation-duration: 21s; }
+.p6 { transform: rotate(260deg) translateX(235px); animation-duration: 23s; }
+.p7 { transform: rotate(312deg) translateX(250px); animation-duration: 25s; }
+
+@keyframes spinPlanets {
+  0% { transform: rotate(0deg) translateX(var(--orbit-distance)) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(var(--orbit-distance)) rotate(-360deg); }
+}
+
+/* Per-planet custom orbit distance for keyframe use */
+.p1 { --orbit-distance: 190px; }
+.p2 { --orbit-distance: 210px; }
+.p3 { --orbit-distance: 230px; }
+.p4 { --orbit-distance: 195px; }
+.p5 { --orbit-distance: 215px; }
+.p6 { --orbit-distance: 235px; }
+
+@media (max-width: 900px) {
+  .orbit-layout { width: 420px; }
+  .orbit-planet { width: 52px; height: 52px; font-size: 1.5rem; }
+  .flag-core { width: 76px; height: 76px; font-size: 2.2rem; }
+}
+
+@media (max-width: 640px) {
+  .orbit-layout { width: 320px; }
+  .orbit-planet { width: 46px; height: 46px; font-size: 1.2rem; }
+  .global-coverage-inner { padding: 16px 0 5px; }
+}
+
 
 /* ============================
    TESTIMONIALS
@@ -307,6 +365,39 @@ ul { list-style: none; }
       rgba(226, 229, 233, 0.82) 50%
     ),
     url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1600&q=80&auto=format&fit=crop')
+    center center / cover no-repeat;
+}
+
+.page-hero-services {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(5, 10, 21, 0.75) 50%,
+      rgba(226, 229, 233, 0.82) 50%
+    ),
+    url('https://images.unsplash.com/photo-1586528116493-7c3d95b7e7b5?w=1600&q=80&auto=format&fit=crop')
+    center center / cover no-repeat;
+}
+
+.page-hero-contact {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(5, 10, 21, 0.75) 50%,
+      rgba(226, 229, 233, 0.82) 50%
+    ),
+    url('https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1600&q=80&auto=format&fit=crop')
+    center center / cover no-repeat;
+}
+
+.page-hero-blog {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(5, 10, 21, 0.75) 50%,
+      rgba(226, 229, 233, 0.82) 50%
+    ),
+    url('https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1600&q=80&auto=format&fit=crop')
     center center / cover no-repeat;
 }
 

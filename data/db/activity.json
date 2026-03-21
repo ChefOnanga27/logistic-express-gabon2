@@ -1,5 +1,19 @@
 [
   {
+    "id": "294cedec-1857-4180-9b31-a992c6537823",
+    "createdAt": "2026-03-21T13:04:42.334Z",
+    "type": "auth",
+    "action": "Connexion de Alphonse Minko",
+    "user": "Alphonse Minko"
+  },
+  {
+    "id": "ad2a159d-6ea5-4643-8291-999fc89061b0",
+    "createdAt": "2026-03-21T08:13:19.251Z",
+    "type": "auth",
+    "action": "Déconnexion de Alphonse Minko",
+    "user": "Alphonse Minko"
+  },
+  {
     "id": "7b37cabf-7e36-4037-99b5-df68a44299fc",
     "createdAt": "2026-03-21T07:41:38.587Z",
     "type": "colis",

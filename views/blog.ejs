@@ -1,6 +1,6 @@
 <%- include('partials/header') %>
 
-<section class="page-hero">
+<section class="page-hero page-hero-blog">
   <div class="page-hero-overlay"></div>
   <div class="container page-hero-content">
     <h1>Blog &amp; Actualités</h1>
@@ -32,9 +32,13 @@
 
     <!-- Article vedette -->
     <% const featured = articles[0]; %>
+    <% const blogImages = {
+        'logistique-gabon-2026': '/images/a.jpg',
+        'guide-import-gabon': '/images/hero-logistics.jpg'
+      }; %>
+    <% const featuredImage = blogImages[featured.slug] || '/images/about-logistics.jpeg'; %>
     <a href="/blog/<%= featured.slug %>" class="blog-featured">
-      <div class="bf-image" style="background:<%= featured.image_color %>;">
-        <i class="fa <%= featured.image_placeholder %>"></i>
+      <div class="bf-image" style="background-image:url('<%= featuredImage %>'); background-size:cover; background-position:center;">
       </div>
       <div class="bf-content">
         <div class="bf-meta">
@@ -56,9 +60,9 @@
     <% if (articles.length > 1) { %>
     <div class="blog-grid">
       <% articles.slice(1).forEach(a => { %>
+      <% const articleImage = blogImages[a.slug] || '/images/hero-logistics.jpg'; %>
       <a href="/blog/<%= a.slug %>" class="blog-card">
-        <div class="bc-image" style="background:<%= a.image_color %>;">
-          <i class="fa <%= a.image_placeholder %>"></i>
+        <div class="bc-image" style="background-image:url('<%= articleImage %>'); background-size:cover; background-position:center;">
         </div>
         <div class="bc-content">
           <div class="bc-meta">
