@@ -1,0 +1,89 @@
+<%- include('partials/header') %>
+
+<section class="page-hero">
+  <div class="page-hero-overlay"></div>
+  <div class="container page-hero-content">
+    <h1>À Propos</h1>
+    <nav class="breadcrumb"><a href="/">Accueil</a> <i class="fa fa-chevron-right"></i> À Propos</nav>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container about-intro">
+    <div class="about-text">
+      <span class="section-badge">Notre histoire</span>
+      <h2>Logistic Express Gabon,<br>né de la passion du service</h2>
+      <p>Fondée en 2014 à Libreville, Logistic Express Gabon est née d'une ambition simple : offrir aux gabonais un service logistique à la hauteur des standards internationaux. Depuis plus de 10 ans, nous avons bâti un réseau solide couvrant l'ensemble du territoire national.</p>
+      <p>Notre mission est d'être le partenaire de croissance de nos clients, en proposant des solutions logistiques innovantes, fiables et accessibles. Nous accompagnons aussi bien les PME que les grandes entreprises dans leurs défis de transport et de distribution.</p>
+      <div class="about-stats">
+        <div class="about-stat"><strong>2014</strong><span>Année de fondation</span></div>
+        <div class="about-stat"><strong>120+</strong><span>Employés</span></div>
+        <div class="about-stat"><strong>30+</strong><span>Véhicules en flotte</span></div>
+        <div class="about-stat"><strong>9</strong><span>Provinces couvertes</span></div>
+      </div>
+    </div>
+    <div class="about-visual">
+      <div class="about-img-placeholder">
+        <i class="fa fa-truck-moving"></i>
+        <span>Notre flotte sur la route</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section values-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Nos valeurs</span>
+      <h2>Ce qui nous guide chaque jour</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card">
+        <i class="fa fa-handshake"></i>
+        <h3>Confiance</h3>
+        <p>La confiance est le fondement de toutes nos relations — avec nos clients, nos partenaires et nos équipes.</p>
+      </div>
+      <div class="value-card">
+        <i class="fa fa-bolt"></i>
+        <h3>Réactivité</h3>
+        <p>Nous répondons vite, nous livrons vite. La réactivité est notre promesse au quotidien.</p>
+      </div>
+      <div class="value-card">
+        <i class="fa fa-leaf"></i>
+        <h3>Responsabilité</h3>
+        <p>Nous nous engageons pour un transport plus responsable et respectueux de l'environnement gabonais.</p>
+      </div>
+      <div class="value-card">
+        <i class="fa fa-star"></i>
+        <h3>Excellence</h3>
+        <p>Chaque livraison est une occasion de dépasser les attentes et de confirmer notre réputation d'excellence.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section team-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Notre équipe</span>
+      <h2>Les Hommes &amp; Femmes derrière LEG</h2>
+    </div>
+    <div class="team-grid">
+      <% const team = [
+        {initials:'AM', name:'Alphonse Minko', role:'Directeur Général'},
+        {initials:'GN', name:'Grace Ntoutoume', role:'Directrice Commerciale'},
+        {initials:'PO', name:'Patrick Ondo', role:'Responsable Opérations'},
+        {initials:'CF', name:'Carine Folquet', role:'Responsable Clientèle'}
+      ]; %>
+      <% team.forEach(m => { %>
+      <div class="team-card">
+        <div class="team-avatar"><%= m.initials %></div>
+        <h4><%= m.name %></h4>
+        <span><%= m.role %></span>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

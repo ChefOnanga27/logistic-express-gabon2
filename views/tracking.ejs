@@ -1,0 +1,78 @@
+<%- include('partials/header') %>
+
+<section class="page-hero">
+  <div class="page-hero-overlay"></div>
+  <div class="container page-hero-content">
+    <h1>Suivi de Colis</h1>
+    <nav class="breadcrumb"><a href="/">Accueil</a> <i class="fa fa-chevron-right"></i> Suivi Colis</nav>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container tracking-layout">
+
+    <div class="tracking-search-box">
+      <h3><i class="fa fa-search"></i> Rechercher votre colis</h3>
+      <form action="/suivi" method="POST" class="tracking-form">
+        <div class="tracking-input-group">
+          <input type="text" name="numero" placeholder="Ex: LEG-2026-08471" value="<%= result ? result.numero : '' %>" required />
+          <button type="submit" class="btn btn-primary">Suivre <i class="fa fa-arrow-right"></i></button>
+        </div>
+      </form>
+      <p class="tracking-hint"><i class="fa fa-info-circle"></i> Le numéro de suivi se trouve sur votre bon de commande ou votre reçu.</p>
+    </div>
+
+    <% if (result) { %>
+    <div class="tracking-result">
+      <div class="tracking-header">
+        <div class="tracking-ref">
+          <span class="track-label">Numéro de suivi</span>
+          <strong><%= result.numero %></strong>
+        </div>
+        <div class="tracking-status <%= result.statut === 'Livré' ? 'status-done' : 'status-transit' %>">
+          <i class="fa fa-<%= result.statut === 'Livré' ? 'check-circle' : 'clock' %>"></i>
+          <%= result.statut %>
+        </div>
+      </div>
+
+      <div class="tracking-meta">
+        <div class="tmeta-item">
+          <span>Origine</span>
+          <strong><i class="fa fa-map-pin"></i> <%= result.origine %></strong>
+        </div>
+        <div class="tmeta-arrow"><i class="fa fa-arrow-right"></i></div>
+        <div class="tmeta-item">
+          <span>Destination</span>
+          <strong><i class="fa fa-map-marker-alt"></i> <%= result.destination %></strong>
+        </div>
+        <div class="tmeta-item">
+          <span>Expédié le</span>
+          <strong><i class="fa fa-calendar"></i> <%= result.date_envoi %></strong>
+        </div>
+        <div class="tmeta-item">
+          <span>Livraison prévue</span>
+          <strong><i class="fa fa-calendar-check"></i> <%= result.date_livraison %></strong>
+        </div>
+      </div>
+
+      <div class="tracking-timeline">
+        <h4>Historique du trajet</h4>
+        <div class="timeline">
+          <% result.etapes.forEach((etape, idx) => { %>
+          <div class="timeline-step <%= etape.done ? 'done' : '' %>">
+            <div class="tl-dot"><i class="fa fa-<%= etape.done ? 'check' : 'circle' %>"></i></div>
+            <div class="tl-content">
+              <strong><%= etape.lieu %></strong>
+              <span><%= etape.date %></span>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+    <% } %>
+
+  </div>
+</section>
+
+<%- include('partials/footer') %>

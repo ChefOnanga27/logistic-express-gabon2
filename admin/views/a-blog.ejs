@@ -1,0 +1,82 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <h2 class="page-title"><i class="fa fa-newspaper"></i> Gestion du Blog</h2>
+    <div class="pt-stats">
+      <span class="pts-item pts-blue"><strong><%= total %></strong> total</span>
+      <span class="pts-item pts-green"><strong><%= publies %></strong> publiés</span>
+      <span class="pts-item pts-gray"><strong><%= brouillons %></strong> brouillons</span>
+    </div>
+  </div>
+  <a href="/admin/blog/new" class="btn-admin-primary"><i class="fa fa-plus"></i> Nouvel article</a>
+</div>
+
+<!-- Onglets -->
+<div class="status-tabs">
+  <a href="/admin/blog"          class="stab <%= !filtrePub ? 'stab-active' : '' %>">Tous</a>
+  <a href="/admin/blog?publie=1" class="stab <%= filtrePub==='1' ? 'stab-active' : '' %>"><span class="stab-dot stab-green"></span>Publiés</a>
+  <a href="/admin/blog?publie=0" class="stab <%= filtrePub==='0' ? 'stab-active' : '' %>"><span class="stab-dot stab-gray"></span>Brouillons</a>
+</div>
+
+<!-- Recherche -->
+<div class="filter-bar">
+  <form action="/admin/blog" method="GET" class="filter-form">
+    <div class="filter-search"><i class="fa fa-search"></i>
+      <input type="text" name="q" value="<%= q %>" placeholder="Titre, catégorie, auteur..."/>
+    </div>
+    <% if (filtrePub) { %><input type="hidden" name="publie" value="<%= filtrePub %>"/><% } %>
+    <button type="submit" class="btn-filter"><i class="fa fa-search"></i></button>
+    <a href="/admin/blog" class="btn-reset"><i class="fa fa-xmark"></i></a>
+  </form>
+</div>
+
+<!-- Grille articles -->
+<div class="blog-admin-grid">
+  <% if (posts.length === 0) { %>
+  <div class="dc-empty" style="grid-column:1/-1;"><i class="fa fa-newspaper"></i> Aucun article trouvé</div>
+  <% } %>
+  <% posts.forEach(p => { %>
+  <div class="blog-admin-card">
+    <div class="bac-thumb" style="background:<%= p.image_color || '#1a3a7c' %>;">
+      <i class="fa <%= p.image_placeholder || 'fa-newspaper' %>"></i>
+      <% if (p.publie) { %>
+      <span class="bac-pub-badge pub-yes"><i class="fa fa-circle"></i> Publié</span>
+      <% } else { %>
+      <span class="bac-pub-badge pub-no"><i class="fa fa-pencil"></i> Brouillon</span>
+      <% } %>
+    </div>
+    <div class="bac-body">
+      <div class="bac-meta">
+        <span class="bac-cat"><%= p.categorie %></span>
+        <span class="bac-views"><i class="fa fa-eye"></i> <%= p.vues || 0 %></span>
+      </div>
+      <h3 class="bac-title"><%= p.titre %></h3>
+      <p class="bac-resume"><%= (p.resume || '').substring(0, 90) %>...</p>
+      <div class="bac-footer">
+        <div class="bac-author">
+          <div class="mini-avatar"><%= (p.auteur||'A').split(' ').map(w=>w[0]).join('').slice(0,2) %></div>
+          <span><%= p.auteur %></span>
+        </div>
+        <span class="bac-date"><%= p.date %></span>
+      </div>
+    </div>
+    <div class="bac-actions">
+      <a href="/admin/blog/<%= p.id %>" class="bac-btn bac-btn-blue" title="Voir"><i class="fa fa-eye"></i></a>
+      <a href="/admin/blog/<%= p.id %>/edit" class="bac-btn bac-btn-yellow" title="Modifier"><i class="fa fa-pen"></i></a>
+      <form action="/admin/blog/<%= p.id %>/toggle" method="POST" style="display:inline;">
+        <button type="submit" class="bac-btn <%= p.publie ? 'bac-btn-gray' : 'bac-btn-green' %>"
+                title="<%= p.publie ? 'Dépublier' : 'Publier' %>">
+          <i class="fa fa-<%= p.publie ? 'eye-slash' : 'check' %>"></i>
+        </button>
+      </form>
+      <form action="/admin/blog/<%= p.id %>/delete" method="POST" style="display:inline;"
+            onsubmit="return confirm('Supprimer cet article ?')">
+        <button type="submit" class="bac-btn bac-btn-red" title="Supprimer"><i class="fa fa-trash"></i></button>
+      </form>
+    </div>
+  </div>
+  <% }) %>
+</div>
+
+<%- include('partials/layout-bottom') %>

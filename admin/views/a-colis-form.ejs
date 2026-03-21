@@ -1,0 +1,92 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <a href="/admin/colis" class="btn-admin-ghost btn-sm"><i class="fa fa-arrow-left"></i> Retour</a>
+    <h2 class="page-title"><i class="fa fa-plus"></i> Nouveau Colis</h2>
+  </div>
+</div>
+
+<div class="form-page-layout">
+  <div class="form-main-card">
+    <form action="/admin/colis/new" method="POST" class="admin-form">
+
+      <div class="af-section"><h3><i class="fa fa-user"></i> Informations client</h3></div>
+      <div class="af-row">
+        <div class="af-group">
+          <label>Nom du client *</label>
+          <input type="text" name="client" required placeholder="Nom complet ou raison sociale"/>
+        </div>
+        <div class="af-group">
+          <label>Email *</label>
+          <input type="email" name="email" required placeholder="email@client.com"/>
+        </div>
+      </div>
+      <div class="af-row">
+        <div class="af-group">
+          <label>Téléphone</label>
+          <input type="tel" name="telephone" placeholder="+241 0XX XXX XXXX"/>
+        </div>
+        <div class="af-group">
+          <label>Service *</label>
+          <select name="service" required>
+            <option value="">Sélectionner...</option>
+            <option>Transport Routier</option>
+            <option>Transport Maritime</option>
+            <option>Transport Aérien</option>
+            <option>Entreposage</option>
+            <option>Déménagement</option>
+            <option>Import / Export</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="af-section"><h3><i class="fa fa-route"></i> Trajet & Colis</h3></div>
+      <div class="af-row">
+        <div class="af-group">
+          <label>Ville d'origine *</label>
+          <input type="text" name="origine" required placeholder="Ex: Libreville"/>
+        </div>
+        <div class="af-group">
+          <label>Destination *</label>
+          <input type="text" name="destination" required placeholder="Ex: Port-Gentil, Paris..."/>
+        </div>
+      </div>
+      <div class="af-row">
+        <div class="af-group">
+          <label>Poids / Volume</label>
+          <input type="text" name="poids" placeholder="Ex: 250 kg, 2 palettes"/>
+        </div>
+        <div class="af-group">
+          <label>Date de livraison prévue</label>
+          <input type="date" name="dateLivraison"/>
+        </div>
+      </div>
+      <div class="af-group">
+        <label>Description de la marchandise</label>
+        <textarea name="description" rows="3" placeholder="Nature des marchandises, instructions particulières..."></textarea>
+      </div>
+
+      <div class="af-actions">
+        <a href="/admin/colis" class="btn-cancel">Annuler</button>
+        <button type="submit" class="btn-admin-primary">
+          <i class="fa fa-plus"></i> Créer le colis
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <aside class="form-sidebar-info">
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-info-circle"></i> À savoir</h3>
+      <ul class="info-bullets">
+        <li><i class="fa fa-check"></i> Un numéro de suivi unique sera généré automatiquement</li>
+        <li><i class="fa fa-check"></i> Le statut initial sera "En attente"</li>
+        <li><i class="fa fa-check"></i> Vous pourrez ajouter les étapes de suivi après création</li>
+        <li><i class="fa fa-check"></i> Le client pourra suivre son colis avec le numéro généré</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<%- include('partials/layout-bottom') %>

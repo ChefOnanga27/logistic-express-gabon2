@@ -1,0 +1,42 @@
+[
+  {
+    "id": "79d1b213-be78-4874-82c4-d7cd2aef6f09",
+    "createdAt": "2026-03-21T07:37:48.707Z",
+    "email": "client.test@gmail.com",
+    "nom": "Client Test",
+    "statut": "actif",
+    "source": "devis"
+  },
+  {
+    "id": "c6fd1164-1b23-4c38-9a56-2922660b6042",
+    "createdAt": "2026-03-21T07:37:48.707Z",
+    "email": "grace.nto@yahoo.fr",
+    "nom": "Grace Ntoutoume",
+    "statut": "inactif",
+    "source": "newsletter"
+  },
+  {
+    "id": "7415ba0d-534a-4e07-bba2-2da9913954bf",
+    "createdAt": "2026-03-21T07:37:48.705Z",
+    "email": "pierre.m@sarl.ga",
+    "nom": "Pierre Moussavou",
+    "statut": "actif",
+    "source": "contact"
+  },
+  {
+    "id": "6a252016-9f95-451c-a8b3-02ff3725f1ee",
+    "createdAt": "2026-03-21T07:37:48.705Z",
+    "email": "sophie.nguema@gmail.com",
+    "nom": "Sophie Nguema",
+    "statut": "actif",
+    "source": "newsletter"
+  },
+  {
+    "id": "41d3ef67-e0d4-484f-9008-d9afec032f28",
+    "createdAt": "2026-03-21T07:37:48.703Z",
+    "email": "jean.obame@olam.ga",
+    "nom": "Jean-Marie Obame",
+    "statut": "actif",
+    "source": "newsletter"
+  }
+]

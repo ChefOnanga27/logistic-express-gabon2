@@ -1,0 +1,103 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <h2 class="page-title"><i class="fa fa-box"></i> Gestion des Colis</h2>
+    <div class="pt-stats">
+      <span class="pts-item pts-blue"  ><strong><%= stats.total %></strong> total</span>
+      <span class="pts-item pts-orange"><strong><%= stats.enTransit %></strong> en transit</span>
+      <span class="pts-item pts-green" ><strong><%= stats.livres %></strong> livrés</span>
+      <span class="pts-item pts-yellow"><strong><%= stats.enAttente %></strong> en attente</span>
+      <span class="pts-item pts-red"   ><strong><%= stats.retard %></strong> en retard</span>
+    </div>
+  </div>
+  <a href="/admin/colis/new" class="btn-admin-primary"><i class="fa fa-plus"></i> Nouveau colis</a>
+</div>
+
+<!-- Filtre rapide statut -->
+<div class="status-tabs">
+  <a href="/admin/colis" class="stab <%= !filtreStatut ? 'stab-active' : '' %>">Tous</a>
+  <a href="/admin/colis?statut=En+attente"  class="stab <%= filtreStatut==='En attente' ? 'stab-active' : '' %>"><span class="stab-dot stab-yellow"></span>En attente</a>
+  <a href="/admin/colis?statut=En+transit"  class="stab <%= filtreStatut==='En transit' ? 'stab-active' : '' %>"><span class="stab-dot stab-blue"></span>En transit</a>
+  <a href="/admin/colis?statut=Livr%C3%A9"  class="stab <%= filtreStatut==='Livré' ? 'stab-active' : '' %>"><span class="stab-dot stab-green"></span>Livrés</a>
+  <a href="/admin/colis?statut=Retard"      class="stab <%= filtreStatut==='Retard' ? 'stab-active' : '' %>"><span class="stab-dot stab-red"></span>Retard</a>
+</div>
+
+<!-- Recherche -->
+<div class="filter-bar">
+  <form action="/admin/colis" method="GET" class="filter-form">
+    <div class="filter-search">
+      <i class="fa fa-search"></i>
+      <input type="text" name="q" value="<%= q %>" placeholder="Rechercher numéro, client, destination..." />
+    </div>
+    <% if (filtreStatut) { %><input type="hidden" name="statut" value="<%= filtreStatut %>"/><% } %>
+    <button type="submit" class="btn-filter"><i class="fa fa-search"></i> Rechercher</button>
+    <a href="/admin/colis" class="btn-reset"><i class="fa fa-xmark"></i></a>
+  </form>
+</div>
+
+<div class="table-card">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>N° Colis</th>
+        <th>Client</th>
+        <th>Service</th>
+        <th>Trajet</th>
+        <th>Poids</th>
+        <th>Livraison prévue</th>
+        <th>Statut</th>
+        <th class="th-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (colis.length === 0) { %>
+      <tr><td colspan="8" class="tbl-empty"><i class="fa fa-box-open"></i> Aucun colis trouvé</td></tr>
+      <% } %>
+      <% colis.forEach(c => { %>
+      <tr>
+        <td><code class="code-num"><%= c.numero %></code></td>
+        <td>
+          <div class="tbl-user">
+            <div class="tbl-avatar tbl-avatar-blue"><%= c.client.split(' ').map(w=>w[0]).join('').slice(0,2) %></div>
+            <div>
+              <span><%= c.client %></span>
+              <small class="tbl-sub"><%= c.email %></small>
+            </div>
+          </div>
+        </td>
+        <td><span class="service-chip"><%= c.service %></span></td>
+        <td>
+          <div class="tbl-trajet">
+            <span><%= c.origine %></span>
+            <i class="fa fa-arrow-right traj-arrow"></i>
+            <span><%= c.destination %></span>
+          </div>
+        </td>
+        <td class="tbl-center"><%= c.poids %></td>
+        <td class="tbl-date">
+          <% if (c.dateLivraison) { %>
+            <% const dl = new Date(c.dateLivraison); const today = new Date(); const late = dl < today && c.statut !== 'Livré'; %>
+            <span class="<%= late ? 'date-late' : '' %>">
+              <%= dl.toLocaleDateString('fr-FR') %>
+              <% if (late) { %><i class="fa fa-triangle-exclamation"></i><% } %>
+            </span>
+          <% } else { %>—<% } %>
+        </td>
+        <td><%- statusBadge(c.statut) %></td>
+        <td>
+          <div class="tbl-actions">
+            <a href="/admin/colis/<%= c.id %>" class="tbl-btn tbl-btn-blue" title="Voir détail"><i class="fa fa-eye"></i></a>
+            <form action="/admin/colis/<%= c.id %>/delete" method="POST" style="display:inline;"
+                  onsubmit="return confirm('Supprimer ce colis ?')">
+              <button type="submit" class="tbl-btn tbl-btn-red" title="Supprimer"><i class="fa fa-trash"></i></button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/layout-bottom') %>

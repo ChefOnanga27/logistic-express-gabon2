@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= title %> — LEG Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="/admin/admin.css"/>
+</head>
+<body class="admin-body">
+
+<!-- ── SIDEBAR ────────────────────────────────── -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <img src="/images/logo.jpeg" alt="LEG" class="sidebar-logo"/>
+    <div class="sidebar-brand">
+      <span class="sb-title">LEG Admin</span>
+      <span class="sb-sub">Tableau de bord</span>
+    </div>
+    <button class="sidebar-close" id="sidebarClose"><i class="fa fa-xmark"></i></button>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="su-avatar"><%= (adminUser.nom || 'A').split(' ').map(w=>w[0]).join('').slice(0,2) %></div>
+    <div class="su-info">
+      <strong><%= adminUser.nom %></strong>
+      <span><%= adminUser.role === 'super_admin' ? 'Super Admin' : 'Administrateur' %></span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-group">
+      <span class="nav-label">Principal</span>
+      <a href="/admin" class="nav-item <%= page==='dashboard' ? 'active' : '' %>">
+        <i class="fa fa-gauge-high"></i> Tableau de bord
+      </a>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Gestion</span>
+      <a href="/admin/colis" class="nav-item <%= page==='colis' ? 'active' : '' %>">
+        <i class="fa fa-box"></i> Colis & Suivi
+        <span class="nav-badge nav-badge-blue">Colis</span>
+      </a>
+      <a href="/admin/devis" class="nav-item <%= page==='devis' ? 'active' : '' %>">
+        <i class="fa fa-file-invoice"></i> Devis
+        <span class="nav-badge nav-badge-yellow">Devis</span>
+      </a>
+      <a href="/admin/messages" class="nav-item <%= page==='messages' ? 'active' : '' %>">
+        <i class="fa fa-envelope"></i> Messages
+        <span class="nav-badge nav-badge-red">Msgs</span>
+      </a>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Contenu</span>
+      <a href="/admin/blog" class="nav-item <%= page==='blog' ? 'active' : '' %>">
+        <i class="fa fa-newspaper"></i> Blog
+      </a>
+      <a href="/admin/newsletter" class="nav-item <%= page==='newsletter' ? 'active' : '' %>">
+        <i class="fa fa-at"></i> Newsletter
+      </a>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Système</span>
+      <a href="/admin/parametres" class="nav-item <%= page==='parametres' ? 'active' : '' %>">
+        <i class="fa fa-gear"></i> Paramètres
+      </a>
+      <a href="/" class="nav-item" target="_blank">
+        <i class="fa fa-arrow-up-right-from-square"></i> Voir le site
+      </a>
+      <a href="/admin/logout" class="nav-item nav-logout">
+        <i class="fa fa-right-from-bracket"></i> Déconnexion
+      </a>
+    </div>
+  </nav>
+</aside>
+
+<!-- ── OVERLAY mobile ─────────────────────────── -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ── MAIN ───────────────────────────────────── -->
+<div class="admin-main" id="adminMain">
+
+  <!-- Topbar -->
+  <header class="admin-topbar">
+    <div class="topbar-left">
+      <button class="topbar-burger" id="topbarBurger"><i class="fa fa-bars"></i></button>
+      <div class="topbar-breadcrumb">
+        <a href="/admin"><i class="fa fa-house"></i></a>
+        <i class="fa fa-chevron-right"></i>
+        <span><%= title %></span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <a href="/admin/messages" class="topbar-icon-btn" title="Messages non lus">
+        <i class="fa fa-envelope"></i>
+        <span class="tib-badge" id="msgBadge">…</span>
+      </a>
+      <a href="/admin/colis" class="topbar-icon-btn" title="Colis en transit">
+        <i class="fa fa-box"></i>
+      </a>
+      <div class="topbar-profile">
+        <div class="tp-avatar"><%= (adminUser.nom||'A').split(' ').map(w=>w[0]).join('').slice(0,2) %></div>
+        <span class="tp-name"><%= adminUser.nom.split(' ')[0] %></span>
+        <a href="/admin/logout" class="tp-logout"><i class="fa fa-right-from-bracket"></i></a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page content -->
+  <main class="admin-content">

@@ -1,0 +1,85 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <a href="/admin/messages" class="btn-admin-ghost btn-sm"><i class="fa fa-arrow-left"></i> Retour</a>
+    <h2 class="page-title"><i class="fa fa-envelope-open"></i> Message de <%= message.nom %></h2>
+    <% if (!message.lu) { %><span class="badge badge-red">Non lu</span><% } %>
+    <% if (message.repondu) { %><span class="badge badge-green"><i class="fa fa-check"></i> Répondu</span><% } %>
+  </div>
+  <div class="pt-right">
+    <form action="/admin/messages/<%= message.id %>/delete" method="POST"
+          onsubmit="return confirm('Supprimer ce message ?')" style="display:inline;">
+      <button type="submit" class="btn-admin-danger"><i class="fa fa-trash"></i></button>
+    </form>
+  </div>
+</div>
+
+<div class="detail-layout">
+  <div class="detail-main">
+
+    <!-- Message -->
+    <div class="detail-card">
+      <div class="msg-header">
+        <div class="msg-avatar"><%= message.nom.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() %></div>
+        <div class="msg-meta">
+          <strong><%= message.nom %></strong>
+          <span><a href="mailto:<%= message.email %>" class="ig-link"><%= message.email %></a></span>
+          <% if (message.telephone) { %><span><a href="tel:<%= message.telephone %>" class="ig-link"><%= message.telephone %></a></span><% } %>
+        </div>
+        <div class="msg-date"><%= new Date(message.createdAt).toLocaleString('fr-FR') %></div>
+      </div>
+      <div class="msg-subject"><i class="fa fa-tag"></i> <%= message.objet || 'Sans objet' %></div>
+      <div class="msg-body"><%= message.message %></div>
+    </div>
+
+    <!-- Répondre -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-reply"></i> Répondre par email</h3>
+      <div class="reply-hint">
+        <i class="fa fa-info-circle"></i>
+        Cliquez sur le bouton ci-dessous pour ouvrir votre client email avec une réponse pré-remplie.
+      </div>
+      <div class="reply-actions">
+        <a href="mailto:<%= message.email %>?subject=Re: <%= encodeURIComponent(message.objet || 'Votre message') %>&body=Bonjour <%= encodeURIComponent(message.nom) %>,%0A%0A"
+           class="btn-admin-primary">
+          <i class="fa fa-reply"></i> Répondre par email
+        </a>
+        <% if (!message.repondu) { %>
+        <form action="/admin/messages/<%= message.id %>/repondu" method="POST" style="display:inline;">
+          <button type="submit" class="btn-admin-secondary">
+            <i class="fa fa-check"></i> Marquer comme répondu
+          </button>
+        </form>
+        <% } %>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Sidebar infos -->
+  <aside class="detail-sidebar">
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-user"></i> Expéditeur</h3>
+      <ul class="summary-list">
+        <li><span>Nom</span><strong><%= message.nom %></strong></li>
+        <li><span>Email</span><a href="mailto:<%= message.email %>" class="ig-link" style="font-size:0.85rem;"><%= message.email %></a></li>
+        <% if (message.telephone) { %><li><span>Tél.</span><strong><%= message.telephone %></strong></li><% } %>
+        <li><span>Reçu le</span><strong><%= new Date(message.createdAt).toLocaleDateString('fr-FR') %></strong></li>
+        <li><span>Statut</span><%- message.repondu ? '<span class="badge badge-green">Répondu</span>' : '<span class="badge badge-yellow">En attente</span>' %></li>
+      </ul>
+    </div>
+
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-bolt"></i> Actions rapides</h3>
+      <div class="quick-actions">
+        <a href="/admin/colis/new?client=<%= encodeURIComponent(message.nom) %>&email=<%= encodeURIComponent(message.email) %>"
+           class="qa-btn"><i class="fa fa-box"></i> Créer un colis</a>
+        <a href="/admin/devis?q=<%= encodeURIComponent(message.email) %>"
+           class="qa-btn"><i class="fa fa-file-invoice"></i> Voir ses devis</a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<%- include('partials/layout-bottom') %>

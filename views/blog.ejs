@@ -1,0 +1,113 @@
+<%- include('partials/header') %>
+
+<section class="page-hero">
+  <div class="page-hero-overlay"></div>
+  <div class="container page-hero-content">
+    <h1>Blog &amp; Actualités</h1>
+    <nav class="breadcrumb"><a href="/">Accueil</a> <i class="fa fa-chevron-right"></i> Blog</nav>
+  </div>
+</section>
+
+<section class="section blog-section">
+  <div class="container">
+
+    <!-- Filtres catégories -->
+    <div class="blog-filters">
+      <a href="/blog" class="blog-filter-btn <%= !categorieActive ? 'active' : '' %>">Tous</a>
+      <% categories.forEach(cat => { %>
+      <a href="/blog?categorie=<%= encodeURIComponent(cat) %>"
+         class="blog-filter-btn <%= categorieActive === cat ? 'active' : '' %>">
+        <%= cat %>
+      </a>
+      <% }) %>
+    </div>
+
+    <% if (articles.length === 0) { %>
+    <div class="blog-empty">
+      <i class="fa fa-newspaper"></i>
+      <p>Aucun article dans cette catégorie pour le moment.</p>
+      <a href="/blog" class="btn btn-primary">Voir tous les articles</a>
+    </div>
+    <% } else { %>
+
+    <!-- Article vedette -->
+    <% const featured = articles[0]; %>
+    <a href="/blog/<%= featured.slug %>" class="blog-featured">
+      <div class="bf-image" style="background:<%= featured.image_color %>;">
+        <i class="fa <%= featured.image_placeholder %>"></i>
+      </div>
+      <div class="bf-content">
+        <div class="bf-meta">
+          <span class="article-cat"><%= featured.categorie %></span>
+          <span><i class="fa fa-calendar"></i> <%= featured.date %></span>
+          <span><i class="fa fa-clock"></i> <%= featured.lecture %> de lecture</span>
+        </div>
+        <h2><%= featured.titre %></h2>
+        <p><%= featured.resume %></p>
+        <div class="bf-author">
+          <div class="author-avatar"><%= featured.auteur.split(' ').map(w=>w[0]).join('') %></div>
+          <span><%= featured.auteur %></span>
+          <span class="bf-read">Lire l'article <i class="fa fa-arrow-right"></i></span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Grille articles -->
+    <% if (articles.length > 1) { %>
+    <div class="blog-grid">
+      <% articles.slice(1).forEach(a => { %>
+      <a href="/blog/<%= a.slug %>" class="blog-card">
+        <div class="bc-image" style="background:<%= a.image_color %>;">
+          <i class="fa <%= a.image_placeholder %>"></i>
+        </div>
+        <div class="bc-content">
+          <div class="bc-meta">
+            <span class="article-cat"><%= a.categorie %></span>
+            <span><i class="fa fa-clock"></i> <%= a.lecture %></span>
+          </div>
+          <h3><%= a.titre %></h3>
+          <p><%= a.resume %></p>
+          <div class="bc-footer">
+            <div class="bc-author">
+              <div class="author-avatar sm"><%= a.auteur.split(' ').map(w=>w[0]).join('') %></div>
+              <span><%= a.auteur %></span>
+            </div>
+            <span class="bc-date"><%= a.date %></span>
+          </div>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+    <% } %>
+
+    <!-- Tags populaires -->
+    <div class="blog-tags-section">
+      <h4>Sujets populaires</h4>
+      <div class="blog-tags">
+        <% const allTags = [...new Set(articles.flatMap(a => a.tags))]; %>
+        <% allTags.forEach(tag => { %>
+        <span class="blog-tag"><i class="fa fa-hashtag"></i> <%= tag %></span>
+        <% }) %>
+      </div>
+    </div>
+
+    <% } %>
+  </div>
+</section>
+
+<!-- Newsletter CTA -->
+<section class="newsletter-section">
+  <div class="container newsletter-inner">
+    <div class="newsletter-icon"><i class="fa fa-envelope-open-text"></i></div>
+    <div class="newsletter-text">
+      <h3>Restez informé</h3>
+      <p>Recevez nos actualités logistiques et nos guides pratiques directement dans votre boîte mail.</p>
+    </div>
+    <form class="newsletter-form" onsubmit="return false;">
+      <input type="email" placeholder="Votre adresse email..." />
+      <button class="btn btn-primary" type="submit">S'abonner <i class="fa fa-paper-plane"></i></button>
+    </form>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

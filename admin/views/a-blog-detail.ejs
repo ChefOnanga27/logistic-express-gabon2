@@ -1,0 +1,120 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <a href="/admin/blog" class="btn-admin-ghost btn-sm"><i class="fa fa-arrow-left"></i> Retour</a>
+    <h2 class="page-title"><i class="fa fa-newspaper"></i> Aperçu article</h2>
+    <% if (post.publie) { %>
+    <span class="badge badge-green"><i class="fa fa-circle"></i> Publié</span>
+    <% } else { %>
+    <span class="badge badge-gray"><i class="fa fa-pencil"></i> Brouillon</span>
+    <% } %>
+  </div>
+  <div class="pt-right">
+    <a href="/admin/blog/<%= post.id %>/edit" class="btn-admin-secondary"><i class="fa fa-pen"></i> Modifier</a>
+    <% if (post.publie) { %>
+    <a href="/blog/<%= post.slug %>" target="_blank" class="btn-admin-ghost"><i class="fa fa-arrow-up-right-from-square"></i> Voir sur le site</a>
+    <% } %>
+    <form action="/admin/blog/<%= post.id %>/delete" method="POST" style="display:inline;"
+          onsubmit="return confirm('Supprimer cet article ?')">
+      <button type="submit" class="btn-admin-danger"><i class="fa fa-trash"></i></button>
+    </form>
+  </div>
+</div>
+
+<div class="detail-layout">
+  <div class="detail-main">
+
+    <!-- Preview thumb -->
+    <div class="detail-card" style="padding:0;overflow:hidden;">
+      <div class="blog-preview-header" style="background:<%= post.image_color || '#1a3a7c' %>;">
+        <i class="fa <%= post.image_placeholder || 'fa-newspaper' %>"></i>
+        <div class="bph-overlay">
+          <span class="bac-cat"><%= post.categorie %></span>
+          <h2><%= post.titre %></h2>
+          <div class="bph-meta">
+            <span><i class="fa fa-user"></i> <%= post.auteur %></span>
+            <span><i class="fa fa-calendar"></i> <%= post.date %></span>
+            <span><i class="fa fa-clock"></i> <%= post.lecture %> de lecture</span>
+            <span><i class="fa fa-eye"></i> <%= post.vues || 0 %> vues</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Résumé -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-align-left"></i> Résumé</h3>
+      <p class="blog-resume-preview"><%= post.resume %></p>
+    </div>
+
+    <!-- Contenu -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-file-lines"></i> Contenu</h3>
+      <div class="blog-content-preview">
+        <% (post.contenu || []).forEach(block => { %>
+          <% if (block.type === 'h2') { %>
+          <h2><%= block.texte %></h2>
+          <% } else { %>
+          <p><%= block.texte %></p>
+          <% } %>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <% if (post.tags && post.tags.length) { %>
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-tags"></i> Tags</h3>
+      <div class="tags-row">
+        <% post.tags.forEach(t => { %>
+        <span class="tag-chip"><i class="fa fa-hashtag"></i> <%= t %></span>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="detail-sidebar">
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-info-circle"></i> Informations</h3>
+      <ul class="summary-list">
+        <li><span>Catégorie</span><strong><%= post.categorie %></strong></li>
+        <li><span>Auteur</span><strong><%= post.auteur %></strong></li>
+        <li><span>Date</span><strong><%= post.date %></strong></li>
+        <li><span>Lecture</span><strong><%= post.lecture %></strong></li>
+        <li><span>Vues</span><strong><%= post.vues || 0 %></strong></li>
+        <li><span>Statut</span>
+          <% if (post.publie) { %>
+          <span class="badge badge-green">Publié</span>
+          <% } else { %>
+          <span class="badge badge-gray">Brouillon</span>
+          <% } %>
+        </li>
+        <li><span>Slug URL</span><code class="code-slug">/<%= post.slug %></code></li>
+      </ul>
+    </div>
+
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-bolt"></i> Actions</h3>
+      <div class="quick-actions">
+        <a href="/admin/blog/<%= post.id %>/edit" class="qa-btn"><i class="fa fa-pen"></i> Modifier l'article</a>
+        <form action="/admin/blog/<%= post.id %>/toggle" method="POST">
+          <button type="submit" class="qa-btn" style="width:100%;text-align:left;">
+            <i class="fa fa-<%= post.publie ? 'eye-slash' : 'check' %>"></i>
+            <%= post.publie ? 'Dépublier' : 'Publier' %>
+          </button>
+        </form>
+        <% if (post.publie) { %>
+        <a href="/blog/<%= post.slug %>" target="_blank" class="qa-btn">
+          <i class="fa fa-arrow-up-right-from-square"></i> Voir sur le site
+        </a>
+        <% } %>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<%- include('partials/layout-bottom') %>

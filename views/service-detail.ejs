@@ -1,0 +1,188 @@
+<%- include('partials/header') %>
+
+<!-- Hero page service -->
+<section class="page-hero service-detail-hero" style="--svc-color:<%= service.color %>;">
+  <div class="page-hero-overlay"></div>
+  <div class="sdh-icon-bg"><i class="fa <%= service.icon %>"></i></div>
+  <div class="container page-hero-content sdh-content">
+    <div class="sdh-icon" style="background:<%= service.color %>33; color:<%= service.color %>;">
+      <i class="fa <%= service.icon %>"></i>
+    </div>
+    <div>
+      <nav class="breadcrumb">
+        <a href="/">Accueil</a> <i class="fa fa-chevron-right"></i>
+        <a href="/services">Services</a> <i class="fa fa-chevron-right"></i>
+        <%= service.titre %>
+      </nav>
+      <h1><%= service.titre %></h1>
+      <p class="sdh-accroche"><%= service.accroche %></p>
+    </div>
+  </div>
+  <div class="page-hero-overlay-bottom" style="background:<%= service.color %>;"></div>
+</section>
+
+<!-- Nav ancres -->
+<div class="svc-subnav">
+  <div class="container svc-subnav-inner">
+    <a href="#description">Description</a>
+    <a href="#avantages">Avantages</a>
+    <a href="#processus">Processus</a>
+    <a href="#tarifs">Tarifs</a>
+    <a href="#faq">FAQ</a>
+    <a href="/contact" class="btn btn-primary btn-sm subnav-cta">Demander un devis</a>
+  </div>
+</div>
+
+<div class="svc-detail-body">
+  <div class="container svc-detail-layout">
+
+    <!-- Contenu principal -->
+    <main class="svc-main">
+
+      <!-- Description -->
+      <section class="svc-section" id="description">
+        <h2><i class="fa fa-info-circle" style="color:<%= service.color %>;"></i> Présentation du service</h2>
+        <p class="svc-desc"><%= service.description %></p>
+      </section>
+
+      <!-- Avantages -->
+      <section class="svc-section" id="avantages">
+        <h2><i class="fa fa-star" style="color:<%= service.color %>;"></i> Pourquoi choisir ce service ?</h2>
+        <div class="avantages-grid">
+          <% service.avantages.forEach(a => { %>
+          <div class="avantage-item">
+            <div class="av-check" style="background:<%= service.color %>18; color:<%= service.color %>;"><i class="fa fa-check"></i></div>
+            <span><%= a %></span>
+          </div>
+          <% }) %>
+        </div>
+      </section>
+
+      <!-- Processus -->
+      <section class="svc-section" id="processus">
+        <h2><i class="fa fa-list-ol" style="color:<%= service.color %>;"></i> Comment ça marche ?</h2>
+        <div class="process-steps">
+          <% service.process.forEach((step, idx) => { %>
+          <div class="process-step">
+            <div class="ps-num" style="background:<%= service.color %>; color:white;"><%= idx + 1 %></div>
+            <div class="ps-icon" style="color:<%= service.color %>;"><i class="fa <%= step.icon %>"></i></div>
+            <div class="ps-content">
+              <h4><%= step.titre %></h4>
+              <p><%= step.desc %></p>
+            </div>
+            <% if (idx < service.process.length - 1) { %>
+            <div class="ps-connector" style="border-color:<%= service.color %>40;"></div>
+            <% } %>
+          </div>
+          <% }) %>
+        </div>
+      </section>
+
+      <!-- Tarifs -->
+      <section class="svc-section" id="tarifs">
+        <h2><i class="fa fa-tag" style="color:<%= service.color %>;"></i> Grille tarifaire indicative</h2>
+        <p class="svc-tarif-note">Les tarifs ci-dessous sont indicatifs. Contactez-nous pour un devis personnalisé adapté à votre volume et vos contraintes.</p>
+        <div class="tarifs-table">
+          <% service.tarifs.forEach(t => { %>
+          <div class="tarif-row">
+            <span class="tarif-label"><i class="fa fa-angle-right" style="color:<%= service.color %>;"></i> <%= t.label %></span>
+            <span class="tarif-prix" style="color:<%= service.color %>;"><%= t.prix %></span>
+          </div>
+          <% }) %>
+        </div>
+        <a href="/contact" class="btn btn-primary mt-block">
+          <i class="fa fa-paper-plane"></i> Obtenir un devis précis
+        </a>
+      </section>
+
+      <!-- FAQ -->
+      <section class="svc-section" id="faq">
+        <h2><i class="fa fa-circle-question" style="color:<%= service.color %>;"></i> Questions fréquentes</h2>
+        <div class="faq-list">
+          <% service.faq.forEach((item, idx) => { %>
+          <div class="faq-item" data-idx="<%= idx %>">
+            <button class="faq-q" onclick="toggleFaq(this)">
+              <span><%= item.q %></span>
+              <i class="fa fa-chevron-down faq-chevron"></i>
+            </button>
+            <div class="faq-a"><p><%= item.r %></p></div>
+          </div>
+          <% }) %>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="svc-sidebar">
+
+      <div class="sidebar-card cta-card" style="border-top: 4px solid <%= service.color %>;">
+        <div class="cta-card-icon" style="background:<%= service.color %>18; color:<%= service.color %>;"><i class="fa <%= service.icon %>"></i></div>
+        <h4>Demander un devis</h4>
+        <p>Obtenez une proposition tarifaire gratuite en moins de 2h.</p>
+        <a href="/contact" class="btn btn-primary btn-block">Nous contacter</a>
+        <a href="tel:+24174000000" class="btn-call"><i class="fa fa-phone"></i> +241 074 00 00 00</a>
+      </div>
+
+      <div class="sidebar-card">
+        <h4><i class="fa fa-grid-2"></i> Autres services</h4>
+        <ul class="sidebar-services">
+          <% others.forEach(o => { %>
+          <li>
+            <a href="/services/<%= o.slug %>">
+              <span class="ss-icon" style="background:<%= o.color %>18; color:<%= o.color %>;"><i class="fa <%= o.icon %>"></i></span>
+              <span class="ss-label"><%= o.titre %></span>
+              <i class="fa fa-chevron-right ss-arrow"></i>
+            </a>
+          </li>
+          <% }) %>
+          <li><a href="/services" class="see-all-services">Voir tous les services <i class="fa fa-arrow-right"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-card contact-card">
+        <h4><i class="fa fa-headset"></i> Besoin d'aide ?</h4>
+        <p>Notre équipe est disponible du lundi au samedi de 07h30 à 18h00.</p>
+        <div class="contact-card-links">
+          <a href="tel:+24174000000"><i class="fa fa-phone"></i> +241 074 00 00 00</a>
+          <a href="mailto:contact@logistic-express-gabon.ga"><i class="fa fa-envelope"></i> Envoyer un email</a>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+</div>
+
+<section class="cta-section">
+  <div class="container cta-inner">
+    <div>
+      <h2>Prêt à utiliser ce service ?</h2>
+      <p>Contactez-nous pour un devis gratuit et personnalisé sous 2h.</p>
+    </div>
+    <div class="cta-btns">
+      <a href="/contact" class="btn btn-primary">Demander un devis</a>
+      <a href="/services" class="btn btn-outline-white"><i class="fa fa-grid-2"></i> Tous les services</a>
+    </div>
+  </div>
+</section>
+
+<script>
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// Subnav active on scroll
+const sections = document.querySelectorAll('.svc-section');
+const links = document.querySelectorAll('.svc-subnav a:not(.subnav-cta)');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+  links.forEach(l => { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
+});
+</script>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,208 @@
+<%- include('partials/layout-top') %>
+
+<!-- KPI Cards -->
+<div class="kpi-grid">
+  <div class="kpi-card kpi-blue">
+    <div class="kpi-icon"><i class="fa fa-box"></i></div>
+    <div class="kpi-body">
+      <span class="kpi-label">Colis total</span>
+      <strong class="kpi-value"><%= stats.colis.total %></strong>
+      <span class="kpi-sub"><%= stats.colis.enTransit %> en transit · <%= stats.colis.livres %> livrés</span>
+    </div>
+    <a href="/admin/colis" class="kpi-link"><i class="fa fa-arrow-right"></i></a>
+  </div>
+  <div class="kpi-card kpi-yellow">
+    <div class="kpi-icon"><i class="fa fa-file-invoice"></i></div>
+    <div class="kpi-body">
+      <span class="kpi-label">Demandes de devis</span>
+      <strong class="kpi-value"><%= stats.devis.total %></strong>
+      <span class="kpi-sub"><%= stats.devis.enAttente %> en attente de traitement</span>
+    </div>
+    <a href="/admin/devis" class="kpi-link"><i class="fa fa-arrow-right"></i></a>
+  </div>
+  <div class="kpi-card kpi-green">
+    <div class="kpi-icon"><i class="fa fa-at"></i></div>
+    <div class="kpi-body">
+      <span class="kpi-label">Abonnés newsletter</span>
+      <strong class="kpi-value"><%= stats.subscribers.total %></strong>
+      <span class="kpi-sub"><%= stats.subscribers.actifs %> actifs</span>
+    </div>
+    <a href="/admin/newsletter" class="kpi-link"><i class="fa fa-arrow-right"></i></a>
+  </div>
+  <div class="kpi-card kpi-red">
+    <div class="kpi-icon"><i class="fa fa-envelope"></i></div>
+    <div class="kpi-body">
+      <span class="kpi-label">Messages non lus</span>
+      <strong class="kpi-value"><%= stats.messages.nonLus %></strong>
+      <span class="kpi-sub"><%= stats.messages.total %> messages au total</span>
+    </div>
+    <a href="/admin/messages" class="kpi-link"><i class="fa fa-arrow-right"></i></a>
+  </div>
+</div>
+
+<!-- Stats secondaires -->
+<div class="dash-row">
+  <div class="dash-stat-mini">
+    <i class="fa fa-box-open" style="color:var(--a-blue);"></i>
+    <div><strong><%= stats.colisAujourdHui %></strong><span>Colis aujourd'hui</span></div>
+  </div>
+  <div class="dash-stat-mini">
+    <i class="fa fa-file-circle-plus" style="color:var(--a-yellow);"></i>
+    <div><strong><%= stats.devisAujourdHui %></strong><span>Devis aujourd'hui</span></div>
+  </div>
+  <div class="dash-stat-mini">
+    <i class="fa fa-triangle-exclamation" style="color:#ef4444;"></i>
+    <div><strong><%= stats.colis.retard %></strong><span>Colis en retard</span></div>
+  </div>
+  <div class="dash-stat-mini">
+    <i class="fa fa-newspaper" style="color:var(--a-green);"></i>
+    <div><strong><%= stats.posts.publies %></strong><span>Articles publiés</span></div>
+  </div>
+  <div class="dash-stat-mini">
+    <i class="fa fa-pencil" style="color:var(--a-muted);"></i>
+    <div><strong><%= stats.posts.brouillons %></strong><span>Brouillons</span></div>
+  </div>
+</div>
+
+<!-- Chart + Recent messages -->
+<div class="dash-grid-2">
+
+  <!-- Graphique activité -->
+  <div class="dash-card dash-chart-card">
+    <div class="dc-header">
+      <h3><i class="fa fa-chart-line"></i> Activité — 30 derniers jours</h3>
+      <div class="chart-legend">
+        <span class="cl-dot" style="background:var(--a-blue);"></span> Colis
+        <span class="cl-dot" style="background:var(--a-yellow);"></span> Devis
+        <span class="cl-dot" style="background:var(--a-green);"></span> Messages
+      </div>
+    </div>
+    <canvas id="activityChart" height="120"></canvas>
+  </div>
+
+  <!-- Messages non lus -->
+  <div class="dash-card">
+    <div class="dc-header">
+      <h3><i class="fa fa-envelope"></i> Messages non lus</h3>
+      <a href="/admin/messages" class="dc-see-all">Voir tous <i class="fa fa-arrow-right"></i></a>
+    </div>
+    <% if (recentMessages.length === 0) { %>
+    <div class="dc-empty"><i class="fa fa-check-circle"></i> Aucun message non lu</div>
+    <% } else { %>
+    <ul class="dc-list">
+      <% recentMessages.forEach(m => { %>
+      <li class="dc-list-item">
+        <div class="dcli-avatar"><%= m.nom.split(' ').map(w=>w[0]).join('').slice(0,2) %></div>
+        <div class="dcli-info">
+          <strong><%= m.nom %></strong>
+          <span><%= m.objet %></span>
+        </div>
+        <a href="/admin/messages/<%= m.id %>" class="dcli-btn"><i class="fa fa-eye"></i></a>
+      </li>
+      <% }) %>
+    </ul>
+    <% } %>
+  </div>
+</div>
+
+<!-- Colis récents + Devis en attente -->
+<div class="dash-grid-2">
+
+  <!-- Colis récents -->
+  <div class="dash-card">
+    <div class="dc-header">
+      <h3><i class="fa fa-box"></i> Colis récents</h3>
+      <a href="/admin/colis/new" class="btn-sm-primary"><i class="fa fa-plus"></i> Nouveau</a>
+    </div>
+    <table class="dc-table">
+      <thead><tr><th>N°</th><th>Client</th><th>Destination</th><th>Statut</th><th></th></tr></thead>
+      <tbody>
+        <% recentColis.forEach(c => { %>
+        <tr>
+          <td><code class="code-num"><%= c.numero %></code></td>
+          <td><%= c.client %></td>
+          <td><%= c.destination %></td>
+          <td><%- statusBadge(c.statut) %></td>
+          <td><a href="/admin/colis/<%= c.id %>" class="tbl-link"><i class="fa fa-eye"></i></a></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <a href="/admin/colis" class="dc-footer-link">Tous les colis <i class="fa fa-arrow-right"></i></a>
+  </div>
+
+  <!-- Devis en attente -->
+  <div class="dash-card">
+    <div class="dc-header">
+      <h3><i class="fa fa-file-invoice"></i> Devis en attente</h3>
+      <a href="/admin/devis" class="dc-see-all">Voir tous <i class="fa fa-arrow-right"></i></a>
+    </div>
+    <% if (recentDevis.length === 0) { %>
+    <div class="dc-empty"><i class="fa fa-check-circle"></i> Aucun devis en attente</div>
+    <% } else { %>
+    <ul class="dc-list">
+      <% recentDevis.forEach(d => { %>
+      <li class="dc-list-item">
+        <div class="dcli-icon" style="background:rgba(245,197,24,0.15);color:#b8860b;"><i class="fa fa-file-invoice"></i></div>
+        <div class="dcli-info">
+          <strong><%= d.nom %></strong>
+          <span><%= d.typeService %> · <%= d.origine %> → <%= d.destination %></span>
+        </div>
+        <a href="/admin/devis/<%= d.id %>" class="dcli-btn"><i class="fa fa-eye"></i></a>
+      </li>
+      <% }) %>
+    </ul>
+    <% } %>
+  </div>
+</div>
+
+<!-- Activité récente -->
+<div class="dash-card">
+  <div class="dc-header">
+    <h3><i class="fa fa-clock-rotate-left"></i> Activité récente</h3>
+  </div>
+  <ul class="activity-list">
+    <% activities.forEach(a => { %>
+    <li class="al-item">
+      <div class="al-dot al-dot-<%= a.type %>"></div>
+      <div class="al-info">
+        <span><%= a.action %></span>
+        <small><%= new Date(a.createdAt).toLocaleString('fr-FR') %> · <%= a.user %></small>
+      </div>
+    </li>
+    <% }) %>
+  </ul>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+const chartData = <%- JSON.stringify(chartData) %>;
+
+const ctx = document.getElementById('activityChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: chartData.map(d => d.label),
+    datasets: [
+      { label: 'Colis',    data: chartData.map(d => d.colis),    borderColor: '#1a3a7c', backgroundColor: 'rgba(26,58,124,0.08)',  tension: 0.4, fill: true, pointRadius: 2 },
+      { label: 'Devis',    data: chartData.map(d => d.devis),    borderColor: '#f5c518', backgroundColor: 'rgba(245,197,24,0.08)', tension: 0.4, fill: true, pointRadius: 2 },
+      { label: 'Messages', data: chartData.map(d => d.messages), borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.08)', tension: 0.4, fill: true, pointRadius: 2 },
+    ],
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1, color: '#9ca3af', font: { size: 11 } }, grid: { color: '#f0f0f0' } },
+      x: { ticks: { color: '#9ca3af', font: { size: 10 }, maxTicksLimit: 8 }, grid: { display: false } },
+    },
+  },
+});
+
+fetch('/admin/api/stats').then(r=>r.json()).then(d => {
+  const b = document.getElementById('msgBadge');
+  if (b) { b.textContent = d.messages.nonLus; b.style.display = d.messages.nonLus > 0 ? 'flex' : 'none'; }
+});
+</script>
+
+<%- include('partials/layout-bottom') %>

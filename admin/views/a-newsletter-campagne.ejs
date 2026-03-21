@@ -1,0 +1,91 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <h2 class="page-title"><i class="fa fa-paper-plane"></i> Nouvelle campagne newsletter</h2>
+    <div class="pt-stats">
+      <span class="pts-item pts-green"><strong><%= actifs.length %></strong> destinataires actifs</span>
+    </div>
+  </div>
+  <a href="/admin/newsletter" class="btn-admin-ghost"><i class="fa fa-arrow-left"></i> Retour</a>
+</div>
+
+<div class="campagne-layout">
+  <!-- Éditeur -->
+  <div class="campagne-editor">
+    <form action="/admin/newsletter/campagne" method="POST" class="campagne-form" id="campagneForm">
+      <div class="editor-card">
+        <h3><i class="fa fa-envelope-open-text"></i> Contenu de la campagne</h3>
+
+        <div class="mf-group">
+          <label>Sujet de l'email *</label>
+          <input type="text" name="sujet" required placeholder="Ex: Découvrez nos nouveaux tarifs 2026 !" />
+        </div>
+
+        <div class="mf-group">
+          <label>Contenu (HTML ou texte)</label>
+          <textarea name="contenu" rows="14" placeholder="Rédigez votre message ici...&#10;&#10;Vous pouvez utiliser du texte simple ou du HTML basique."></textarea>
+        </div>
+      </div>
+
+      <div class="editor-card" style="margin-top:20px;">
+        <h3><i class="fa fa-users"></i> Destinataires (<%= actifs.length %>)</h3>
+        <div class="recipients-list">
+          <% actifs.slice(0, 10).forEach(s => { %>
+          <span class="recipient-chip">
+            <i class="fa fa-circle" style="color:#10b981;font-size:0.5rem;"></i>
+            <%= s.email %>
+          </span>
+          <% }) %>
+          <% if (actifs.length > 10) { %>
+          <span class="recipient-chip rc-more">+<%= actifs.length - 10 %> autres</span>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="campagne-actions">
+        <button type="submit" class="btn-admin-primary btn-lg">
+          <i class="fa fa-paper-plane"></i> Envoyer à <%= actifs.length %> abonnés
+        </button>
+        <button type="button" class="btn-admin-secondary" onclick="previewCampagne()">
+          <i class="fa fa-eye"></i> Prévisualiser
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Preview -->
+  <div class="campagne-preview">
+    <div class="editor-card">
+      <h3><i class="fa fa-eye"></i> Aperçu email</h3>
+      <div class="preview-frame" id="previewFrame">
+        <div class="pf-placeholder">
+          <i class="fa fa-envelope-open"></i>
+          <p>Cliquez sur "Prévisualiser" pour voir un aperçu</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function previewCampagne() {
+  const sujet  = document.querySelector('[name="sujet"]').value || 'Sujet non défini';
+  const corps  = document.querySelector('[name="contenu"]').value || '';
+  const html   = `
+    <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;">
+      <div style="background:linear-gradient(135deg,#1a3a7c,#2b7fd4);padding:28px;text-align:center;border-radius:10px 10px 0 0;">
+        <p style="color:white;font-size:1.2rem;font-weight:700;margin:0;">${sujet}</p>
+      </div>
+      <div style="background:white;padding:28px;border:1px solid #e5e7eb;">
+        <p style="color:#374151;line-height:1.7;">${corps.replace(/\n/g,'<br>')}</p>
+      </div>
+      <div style="background:#f8f9fc;padding:14px;text-align:center;border-radius:0 0 10px 10px;border:1px solid #e5e7eb;border-top:none;">
+        <p style="color:#9ca3af;font-size:0.78rem;margin:0;">Logistic Express Gabon · <a href="#" style="color:#9ca3af;">Se désabonner</a></p>
+      </div>
+    </div>`;
+  document.getElementById('previewFrame').innerHTML = html;
+}
+</script>
+
+<%- include('partials/layout-bottom') %>

@@ -1,0 +1,137 @@
+<%- include('partials/header') %>
+
+<section class="page-hero blog-detail-hero" style="--hero-color:<%= article.image_color %>;">
+  <div class="page-hero-overlay"></div>
+  <div class="bdh-icon-bg"><i class="fa <%= article.image_placeholder %>"></i></div>
+  <div class="container page-hero-content">
+    <nav class="breadcrumb">
+      <a href="/">Accueil</a> <i class="fa fa-chevron-right"></i>
+      <a href="/blog">Blog</a> <i class="fa fa-chevron-right"></i>
+      <span class="breadcrumb-current"><%= article.categorie %></span>
+    </nav>
+    <div class="bdh-meta">
+      <span class="article-cat"><%= article.categorie %></span>
+      <span><i class="fa fa-calendar"></i> <%= article.date %></span>
+      <span><i class="fa fa-clock"></i> <%= article.lecture %> de lecture</span>
+    </div>
+    <h1><%= article.titre %></h1>
+    <div class="bdh-author">
+      <div class="author-avatar"><%= article.auteur.split(' ').map(w=>w[0]).join('') %></div>
+      <div>
+        <strong><%= article.auteur %></strong>
+        <span>Logistic Express Gabon</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="blog-detail-body section">
+  <div class="container blog-detail-layout">
+
+    <!-- Article -->
+    <main class="blog-main">
+      <p class="blog-resume"><%= article.resume %></p>
+
+      <div class="blog-content">
+        <% article.contenu.forEach(block => { %>
+          <% if (block.type === 'p') { %>
+          <p><%= block.texte %></p>
+          <% } else if (block.type === 'h2') { %>
+          <h2><%= block.texte %></h2>
+          <% } %>
+        <% }) %>
+      </div>
+
+      <!-- Tags -->
+      <div class="article-tags">
+        <span><i class="fa fa-tags"></i> Tags :</span>
+        <% article.tags.forEach(tag => { %>
+        <span class="blog-tag"><%= tag %></span>
+        <% }) %>
+      </div>
+
+      <!-- Partage -->
+      <div class="article-share">
+        <span>Partager cet article :</span>
+        <div class="share-btns">
+          <a href="#" class="share-btn facebook"><i class="fab fa-facebook-f"></i> Facebook</a>
+          <a href="#" class="share-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+          <a href="#" class="share-btn linkedin"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+        </div>
+      </div>
+
+      <!-- Auteur -->
+      <div class="author-card">
+        <div class="author-avatar lg"><%= article.auteur.split(' ').map(w=>w[0]).join('') %></div>
+        <div class="author-info">
+          <strong><%= article.auteur %></strong>
+          <span>Expert logistique chez Logistic Express Gabon</span>
+          <p>Spécialiste du transport et de la logistique en Afrique centrale, avec plus de 10 ans d'expérience dans le secteur gabonais.</p>
+        </div>
+      </div>
+
+      <!-- Articles similaires -->
+      <div class="related-articles">
+        <h3>Articles similaires</h3>
+        <div class="related-grid">
+          <% recents.forEach(r => { %>
+          <a href="/blog/<%= r.slug %>" class="related-card">
+            <div class="rc-image" style="background:<%= r.image_color %>;"><i class="fa <%= r.image_placeholder %>"></i></div>
+            <div class="rc-content">
+              <span class="article-cat"><%= r.categorie %></span>
+              <h4><%= r.titre %></h4>
+              <span class="rc-date"><%= r.date %></span>
+            </div>
+          </a>
+          <% }) %>
+        </div>
+      </div>
+    </main>
+
+    <!-- Sidebar -->
+    <aside class="blog-sidebar">
+
+      <div class="sidebar-card">
+        <h4><i class="fa fa-newspaper"></i> Articles récents</h4>
+        <ul class="sidebar-articles">
+          <% articles.filter(a => a.slug !== article.slug).slice(0, 5).forEach(a => { %>
+          <li>
+            <a href="/blog/<%= a.slug %>">
+              <div class="sa-icon" style="background:<%= a.image_color %>18; color:<%= a.image_color %>;"><i class="fa <%= a.image_placeholder %>"></i></div>
+              <div class="sa-info">
+                <span><%= a.titre %></span>
+                <small><%= a.date %></small>
+              </div>
+            </a>
+          </li>
+          <% }) %>
+        </ul>
+      </div>
+
+      <div class="sidebar-card">
+        <h4><i class="fa fa-folder-open"></i> Catégories</h4>
+        <ul class="sidebar-cats">
+          <% const cats = [...new Set(articles.map(a => a.categorie))]; %>
+          <% cats.forEach(cat => { %>
+          <li>
+            <a href="/blog?categorie=<%= encodeURIComponent(cat) %>">
+              <i class="fa fa-chevron-right"></i> <%= cat %>
+              <span class="cat-count"><%= articles.filter(a => a.categorie === cat).length %></span>
+            </a>
+          </li>
+          <% }) %>
+        </ul>
+      </div>
+
+      <div class="sidebar-card cta-card" style="border-top:4px solid var(--primary);">
+        <div class="cta-card-icon"><i class="fa fa-truck-fast"></i></div>
+        <h4>Besoin d'un service ?</h4>
+        <p>Découvrez nos solutions logistiques et obtenez un devis gratuit.</p>
+        <a href="/contact" class="btn btn-primary btn-block">Demander un devis</a>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

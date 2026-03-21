@@ -1,0 +1,162 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <h2 class="page-title"><i class="fa fa-gear"></i> Paramètres</h2>
+  </div>
+</div>
+
+<% if (success) { %>
+<div class="alert-success-bar"><i class="fa fa-check-circle"></i> <%= success %></div>
+<% } %>
+<% if (error) { %>
+<div class="alert-error-bar"><i class="fa fa-triangle-exclamation"></i> <%= error %></div>
+<% } %>
+
+<div class="settings-layout">
+
+  <!-- Colonne principale -->
+  <div class="settings-main">
+
+    <!-- Profil -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-user-pen"></i> Profil administrateur</h3>
+      <div class="profile-header">
+        <div class="profile-avatar"><%= (user.nom||'A').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() %></div>
+        <div>
+          <strong><%= user.nom %></strong>
+          <span><%= user.role === 'super_admin' ? 'Super Administrateur' : 'Administrateur' %></span>
+        </div>
+      </div>
+      <form action="/admin/parametres/profil" method="POST" class="admin-form">
+        <div class="af-row">
+          <div class="af-group">
+            <label>Nom complet</label>
+            <input type="text" name="nom" value="<%= user.nom %>" required/>
+          </div>
+          <div class="af-group">
+            <label>Email</label>
+            <input type="email" name="email" value="<%= user.email %>"/>
+          </div>
+        </div>
+        <div class="af-group">
+          <label>Identifiant de connexion</label>
+          <input type="text" value="<%= user.username %>" disabled class="input-disabled"/>
+          <small class="af-hint">L'identifiant ne peut pas être modifié.</small>
+        </div>
+        <div class="af-actions">
+          <button type="submit" class="btn-admin-primary">
+            <i class="fa fa-check"></i> Enregistrer le profil
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Mot de passe -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-lock"></i> Changer le mot de passe</h3>
+      <form action="/admin/parametres/password" method="POST" class="admin-form">
+        <div class="af-group">
+          <label>Mot de passe actuel *</label>
+          <div class="lf-password">
+            <input type="password" name="currentPassword" id="pwd1" required placeholder="••••••••"/>
+            <button type="button" class="lf-toggle" onclick="togglePwd('pwd1','eye1')"><i class="fa fa-eye" id="eye1"></i></button>
+          </div>
+        </div>
+        <div class="af-row">
+          <div class="af-group">
+            <label>Nouveau mot de passe *</label>
+            <div class="lf-password">
+              <input type="password" name="newPassword" id="pwd2" required placeholder="Min. 8 caractères"/>
+              <button type="button" class="lf-toggle" onclick="togglePwd('pwd2','eye2')"><i class="fa fa-eye" id="eye2"></i></button>
+            </div>
+          </div>
+          <div class="af-group">
+            <label>Confirmer le nouveau mot de passe *</label>
+            <div class="lf-password">
+              <input type="password" name="confirmPassword" id="pwd3" required placeholder="Répéter le mot de passe"/>
+              <button type="button" class="lf-toggle" onclick="togglePwd('pwd3','eye3')"><i class="fa fa-eye" id="eye3"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="pwd-strength" id="pwdStrength"></div>
+        <div class="af-actions">
+          <button type="submit" class="btn-admin-primary">
+            <i class="fa fa-lock"></i> Changer le mot de passe
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="settings-sidebar">
+
+    <!-- Infos session -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-circle-info"></i> Session active</h3>
+      <ul class="summary-list">
+        <li><span>Utilisateur</span><strong><%= user.nom %></strong></li>
+        <li><span>Rôle</span><span class="badge badge-blue"><%= user.role === 'super_admin' ? 'Super Admin' : 'Admin' %></span></li>
+        <li><span>Identifiant</span><code class="code-slug"><%= user.username %></code></li>
+      </ul>
+      <a href="/admin/logout" class="btn-admin-danger btn-block" style="margin-top:16px;">
+        <i class="fa fa-right-from-bracket"></i> Se déconnecter
+      </a>
+    </div>
+
+    <!-- SMTP Info -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-envelope-circle-check"></i> Configuration email</h3>
+      <p class="dc-hint">Les paramètres SMTP sont définis dans le fichier <code>.env</code> du serveur.</p>
+      <ul class="summary-list">
+        <li><span>SMTP Host</span><code class="code-slug">${SMTP_HOST}</code></li>
+        <li><span>SMTP Port</span><code class="code-slug">${SMTP_PORT}</code></li>
+        <li><span>Expéditeur</span><code class="code-slug">${FROM_EMAIL}</code></li>
+        <li><span>Destinataire</span><code class="code-slug">${CONTACT_EMAIL}</code></li>
+      </ul>
+      <div class="env-note">
+        <i class="fa fa-info-circle"></i>
+        Modifiez le fichier <strong>.env</strong> et redémarrez le serveur pour appliquer les changements.
+      </div>
+    </div>
+
+    <!-- Liens rapides -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-bolt"></i> Liens rapides</h3>
+      <div class="quick-actions">
+        <a href="/" target="_blank" class="qa-btn"><i class="fa fa-house"></i> Voir le site public</a>
+        <a href="/admin" class="qa-btn"><i class="fa fa-gauge-high"></i> Tableau de bord</a>
+        <a href="/admin/blog/new" class="qa-btn"><i class="fa fa-plus"></i> Nouvel article</a>
+        <a href="/admin/colis/new" class="qa-btn"><i class="fa fa-box"></i> Nouveau colis</a>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<script>
+function togglePwd(id, eyeId) {
+  const inp = document.getElementById(id);
+  const ico = document.getElementById(eyeId);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  ico.className = inp.type === 'text' ? 'fa fa-eye-slash' : 'fa fa-eye';
+}
+
+// Indicateur force mot de passe
+document.getElementById('pwd2').addEventListener('input', function() {
+  const val = this.value;
+  const el  = document.getElementById('pwdStrength');
+  let score = 0;
+  if (val.length >= 8) score++;
+  if (/[A-Z]/.test(val)) score++;
+  if (/[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  const labels = ['','Faible','Moyen','Bon','Fort'];
+  const colors = ['','#ef4444','#f59e0b','#3b82f6','#10b981'];
+  el.innerHTML = val ? `<div class="pwd-bar" style="width:${score*25}%;background:${colors[score]};"></div><span style="color:${colors[score]}">${labels[score]}</span>` : '';
+});
+</script>
+
+<%- include('partials/layout-bottom') %>

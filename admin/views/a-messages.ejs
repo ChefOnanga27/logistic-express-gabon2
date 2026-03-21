@@ -1,0 +1,71 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <h2 class="page-title"><i class="fa fa-envelope"></i> Messages de contact</h2>
+    <div class="pt-stats">
+      <span class="pts-item pts-blue"><strong><%= total %></strong> total</span>
+      <span class="pts-item pts-red"><strong><%= nonLus %></strong> non lus</span>
+      <span class="pts-item pts-green"><strong><%= repondus %></strong> répondus</span>
+    </div>
+  </div>
+</div>
+
+<!-- Onglets -->
+<div class="status-tabs">
+  <a href="/admin/messages"     class="stab <%= !filtreLu ? 'stab-active' : '' %>">Tous</a>
+  <a href="/admin/messages?lu=non" class="stab <%= filtreLu==='non' ? 'stab-active' : '' %>">
+    <span class="stab-dot stab-red"></span>Non lus <span class="stab-count"><%= nonLus %></span>
+  </a>
+  <a href="/admin/messages?lu=oui" class="stab <%= filtreLu==='oui' ? 'stab-active' : '' %>">
+    <span class="stab-dot stab-green"></span>Lus
+  </a>
+</div>
+
+<!-- Recherche -->
+<div class="filter-bar">
+  <form action="/admin/messages" method="GET" class="filter-form">
+    <div class="filter-search">
+      <i class="fa fa-search"></i>
+      <input type="text" name="q" value="<%= q %>" placeholder="Rechercher nom, email, objet..." />
+    </div>
+    <% if (filtreLu) { %><input type="hidden" name="lu" value="<%= filtreLu %>"/><% } %>
+    <button type="submit" class="btn-filter"><i class="fa fa-search"></i></button>
+    <a href="/admin/messages" class="btn-reset"><i class="fa fa-xmark"></i></a>
+  </form>
+</div>
+
+<!-- Liste messages style inbox -->
+<div class="inbox-list">
+  <% if (messages.length === 0) { %>
+  <div class="inbox-empty">
+    <i class="fa fa-inbox"></i>
+    <p>Aucun message trouvé</p>
+  </div>
+  <% } %>
+  <% messages.forEach(m => { %>
+  <div class="inbox-item <%= !m.lu ? 'inbox-unread' : '' %>">
+    <div class="ii-avatar"><%= m.nom.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() %></div>
+    <div class="ii-body">
+      <div class="ii-header">
+        <strong class="ii-name"><%= m.nom %></strong>
+        <span class="ii-email"><%= m.email %></span>
+        <span class="ii-date"><%= new Date(m.createdAt).toLocaleDateString('fr-FR', {day:'2-digit',month:'short',year:'numeric'}) %></span>
+      </div>
+      <div class="ii-subject"><%= m.objet || '(Sans objet)' %></div>
+      <div class="ii-preview"><%= m.message.substring(0, 120) %>...</div>
+    </div>
+    <div class="ii-actions">
+      <% if (!m.lu) { %><span class="unread-dot"></span><% } %>
+      <% if (m.repondu) { %><span class="badge badge-green badge-xs"><i class="fa fa-check"></i> Répondu</span><% } %>
+      <a href="/admin/messages/<%= m.id %>" class="tbl-btn tbl-btn-blue"><i class="fa fa-eye"></i></a>
+      <form action="/admin/messages/<%= m.id %>/delete" method="POST" style="display:inline;"
+            onsubmit="return confirm('Supprimer ce message ?')">
+        <button type="submit" class="tbl-btn tbl-btn-red"><i class="fa fa-trash"></i></button>
+      </form>
+    </div>
+  </div>
+  <% }) %>
+</div>
+
+<%- include('partials/layout-bottom') %>

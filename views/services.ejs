@@ -1,0 +1,87 @@
+<%- include('partials/header') %>
+
+<section class="page-hero">
+  <div class="page-hero-overlay"></div>
+  <div class="container page-hero-content">
+    <h1>Nos Services</h1>
+    <nav class="breadcrumb"><a href="/">Accueil</a> <i class="fa fa-chevron-right"></i> Services</nav>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-badge">Solutions complètes</span>
+      <h2>Des Services Adaptés à Vos Besoins</h2>
+      <p>Que vous soyez une entreprise ou un particulier, nous avons la solution logistique qu'il vous faut.</p>
+    </div>
+
+    <!-- Cards rapides -->
+    <div class="services-cards-grid">
+      <% services.forEach(s => { %>
+      <div class="srv-card">
+        <div class="srv-card-top">
+          <div class="srv-card-icon" style="background:<%= s.color %>22; color:<%= s.color %>;">
+            <i class="fa <%= s.icon %>"></i>
+          </div>
+          <div class="srv-card-accent" style="background:<%= s.color %>;"></div>
+        </div>
+        <div class="srv-card-body">
+          <h3><%= s.titre %></h3>
+          <p><%= s.accroche %></p>
+          <ul class="srv-card-features">
+            <% s.avantages.slice(0,3).forEach(a => { %>
+            <li><i class="fa fa-check" style="color:<%= s.color %>;"></i> <%= a %></li>
+            <% }) %>
+          </ul>
+          <div class="srv-card-footer">
+            <a href="/services/<%= s.slug %>" class="btn btn-primary btn-sm">Découvrir <i class="fa fa-arrow-right"></i></a>
+            <a href="/contact" class="btn-link">Devis gratuit</a>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+
+    <!-- Strips détaillées -->
+    <div class="services-strip-title">
+      <span class="section-badge">Vue détaillée</span>
+      <h2>Nos prestations en détail</h2>
+    </div>
+
+    <div class="services-detail">
+      <% services.forEach((s, i) => { %>
+      <div class="service-detail-card <%= i % 2 !== 0 ? 'reverse' : '' %>" id="<%= s.slug %>">
+        <div class="sdc-icon" style="background:<%= s.color %>18; color:<%= s.color %>;">
+          <i class="fa <%= s.icon %>"></i>
+        </div>
+        <div class="sdc-content">
+          <h3><%= s.titre %></h3>
+          <p><%= s.description %></p>
+          <ul class="service-features">
+            <% s.avantages.forEach(a => { %>
+            <li><i class="fa fa-check" style="color:<%= s.color %>;"></i> <%= a %></li>
+            <% }) %>
+          </ul>
+          <div class="sdc-actions">
+            <a href="/services/<%= s.slug %>" class="btn btn-primary">Page complète <i class="fa fa-arrow-right"></i></a>
+            <a href="/contact" class="btn-link"><i class="fa fa-phone"></i> Demander un devis</a>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container cta-inner">
+    <div>
+      <h2>Vous avez un besoin spécifique ?</h2>
+      <p>Notre équipe d'experts vous accompagne pour trouver la solution idéale.</p>
+    </div>
+    <a href="/contact" class="btn btn-primary">Contactez-nous</a>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

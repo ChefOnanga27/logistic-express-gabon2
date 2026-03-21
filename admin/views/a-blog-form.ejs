@@ -1,0 +1,194 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <a href="/admin/blog" class="btn-admin-ghost btn-sm"><i class="fa fa-arrow-left"></i> Retour</a>
+    <h2 class="page-title">
+      <i class="fa fa-<%= post ? 'pen' : 'plus' %>"></i>
+      <%= post ? 'Modifier l\'article' : 'Nouvel article' %>
+    </h2>
+  </div>
+  <% if (post) { %>
+  <div class="pt-right">
+    <a href="/blog/<%= post.slug %>" target="_blank" class="btn-admin-ghost">
+      <i class="fa fa-arrow-up-right-from-square"></i> Voir sur le site
+    </a>
+  </div>
+  <% } %>
+</div>
+
+<% if (error) { %>
+<div class="alert-error-bar"><i class="fa fa-triangle-exclamation"></i> <%= error %></div>
+<% } %>
+
+<div class="editor-layout">
+
+  <!-- Éditeur principal -->
+  <div class="editor-main">
+    <form action="<%= post ? '/admin/blog/' + post.id + '/edit' : '/admin/blog/new' %>"
+          method="POST" class="admin-form" id="articleForm">
+
+      <!-- Titre -->
+      <div class="editor-card">
+        <div class="af-group">
+          <label class="af-label-lg">Titre de l'article *</label>
+          <input type="text" name="titre" required
+                 value="<%= post ? post.titre : '' %>"
+                 placeholder="Entrez un titre accrocheur..."
+                 class="input-title"/>
+        </div>
+      </div>
+
+      <!-- Résumé -->
+      <div class="editor-card">
+        <div class="af-group">
+          <label>Résumé / Introduction *</label>
+          <textarea name="resume" rows="3" required
+                    placeholder="Courte description qui apparaît dans les listes d'articles (150-200 mots)..."><%= post ? post.resume : '' %></textarea>
+        </div>
+      </div>
+
+      <!-- Contenu -->
+      <div class="editor-card">
+        <div class="af-group">
+          <div class="editor-toolbar">
+            <label>Contenu de l'article *</label>
+            <div class="editor-hints">
+              <span class="eh-tip"><code>## Titre</code> → Section H2</span>
+              <span class="eh-tip">Ligne vide → Nouveau paragraphe</span>
+            </div>
+          </div>
+          <textarea name="contenu_raw" rows="18" required id="contentEditor"
+                    placeholder="Rédigez votre article ici...&#10;&#10;Séparez chaque paragraphe par une ligne vide.&#10;&#10;## Pour ajouter un titre de section&#10;&#10;Continuez votre texte ici..."><% if (post && post.contenu) { %><%= post.contenu.map(b => b.type === 'h2' ? '## ' + b.texte : b.texte).join('\n\n') %><% } %></textarea>
+          <div class="content-counter"><span id="wordCount">0</span> mots</div>
+        </div>
+      </div>
+
+    </div><!-- /editor-main (form continues below via JS trick) -->
+  </div>
+
+  <!-- Sidebar paramètres -->
+  <aside class="editor-sidebar">
+
+    <!-- Publication -->
+    <div class="editor-card">
+      <h3 class="ec-title"><i class="fa fa-rocket"></i> Publication</h3>
+      <div class="pub-toggle-row">
+        <label class="toggle-switch">
+          <input type="checkbox" name="publie" id="publieToggle" <%= post && post.publie ? 'checked' : '' %>>
+          <span class="toggle-slider"></span>
+        </label>
+        <span id="pubStatus"><%= post && post.publie ? 'Publié' : 'Brouillon' %></span>
+      </div>
+      <div class="editor-form-actions">
+        <button type="submit" form="articleForm" class="btn-admin-primary btn-block">
+          <i class="fa fa-<%= post ? 'check' : 'plus' %>"></i>
+          <%= post ? 'Enregistrer les modifications' : 'Créer l\'article' %>
+        </button>
+        <% if (post) { %>
+        <form action="/admin/blog/<%= post.id %>/toggle" method="POST">
+          <button type="submit" class="btn-admin-secondary btn-block">
+            <i class="fa fa-<%= post.publie ? 'eye-slash' : 'eye' %>"></i>
+            <%= post.publie ? 'Dépublier' : 'Publier' %>
+          </button>
+        </form>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Métadonnées -->
+    <div class="editor-card">
+      <h3 class="ec-title"><i class="fa fa-tags"></i> Métadonnées</h3>
+      <div class="af-group">
+        <label>Catégorie</label>
+        <select name="categorie">
+          <% ['Actualités','Guide pratique','Transport Maritime','Transport Aérien','Déménagement'].forEach(cat => { %>
+          <option value="<%= cat %>" <%= post && post.categorie===cat ? 'selected':'' %>><%= cat %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="af-group">
+        <label>Auteur</label>
+        <input type="text" name="auteur"
+               value="<%= post ? post.auteur : adminUser.nom %>"
+               placeholder="Nom de l'auteur"/>
+      </div>
+      <div class="af-group">
+        <label>Tags <small>(séparés par des virgules)</small></label>
+        <input type="text" name="tags"
+               value="<%= post && post.tags ? post.tags.join(', ') : '' %>"
+               placeholder="Ex: Logistique, Gabon, Guide"/>
+      </div>
+    </div>
+
+    <!-- Image d'illustration -->
+    <div class="editor-card">
+      <h3 class="ec-title"><i class="fa fa-image"></i> Illustration</h3>
+      <div class="af-group">
+        <label>Couleur de fond</label>
+        <div class="color-row">
+          <input type="color" name="image_color"
+                 value="<%= post ? (post.image_color || '#1a3a7c') : '#1a3a7c' %>"
+                 id="colorPicker"/>
+          <span id="colorVal"><%= post ? (post.image_color || '#1a3a7c') : '#1a3a7c' %></span>
+        </div>
+      </div>
+      <div class="af-group">
+        <label>Icône Font Awesome</label>
+        <div class="icon-picker-row">
+          <input type="text" name="image_placeholder"
+                 value="<%= post ? (post.image_placeholder || 'fa-newspaper') : 'fa-newspaper' %>"
+                 id="iconInput" placeholder="fa-newspaper"/>
+          <div class="icon-preview" id="iconPreview">
+            <i class="fa <%= post ? (post.image_placeholder || 'fa-newspaper') : 'fa-newspaper' %>"></i>
+          </div>
+        </div>
+        <div class="icon-suggestions">
+          <% ['fa-newspaper','fa-truck','fa-ship','fa-plane','fa-box','fa-globe-africa','fa-chart-line','fa-anchor','fa-warehouse','fa-file-import'].forEach(ic => { %>
+          <button type="button" class="ic-sug" onclick="setIcon('<%= ic %>')">
+            <i class="fa <%= ic %>"></i>
+          </button>
+          <% }) %>
+        </div>
+      </div>
+      <!-- Preview -->
+      <div class="thumb-preview" id="thumbPreview"
+           style="background:<%= post ? (post.image_color||'#1a3a7c') : '#1a3a7c' %>;">
+        <i class="fa <%= post ? (post.image_placeholder||'fa-newspaper') : 'fa-newspaper' %>" id="thumbIcon"></i>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<script>
+// Word counter
+const ed = document.getElementById('contentEditor');
+const wc = document.getElementById('wordCount');
+function updateCount() { wc.textContent = (ed.value.trim() ? ed.value.trim().split(/\s+/).length : 0); }
+ed.addEventListener('input', updateCount);
+updateCount();
+
+// Publie toggle label
+document.getElementById('publieToggle').addEventListener('change', function() {
+  document.getElementById('pubStatus').textContent = this.checked ? 'Publié' : 'Brouillon';
+});
+
+// Color picker
+document.getElementById('colorPicker').addEventListener('input', function() {
+  document.getElementById('colorVal').textContent = this.value;
+  document.getElementById('thumbPreview').style.background = this.value;
+});
+
+// Icon picker
+document.getElementById('iconInput').addEventListener('input', function() {
+  setIcon(this.value);
+});
+function setIcon(ic) {
+  document.getElementById('iconInput').value = ic;
+  document.getElementById('iconPreview').innerHTML = `<i class="fa ${ic}"></i>`;
+  document.getElementById('thumbIcon').className = `fa ${ic}`;
+}
+</script>
+
+<%- include('partials/layout-bottom') %>

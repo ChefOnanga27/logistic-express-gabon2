@@ -1,0 +1,114 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <a href="/admin/devis" class="btn-admin-ghost btn-sm"><i class="fa fa-arrow-left"></i> Retour</a>
+    <h2 class="page-title"><i class="fa fa-file-invoice"></i> Devis — <%= devis.nom %></h2>
+    <%
+      const dc = {'En attente':'badge-yellow','En cours':'badge-blue','Traité':'badge-green','Refusé':'badge-red'}[devis.statut]||'badge-gray';
+    %>
+    <span class="badge <%= dc %>"><%= devis.statut %></span>
+  </div>
+  <form action="/admin/devis/<%= devis.id %>/delete" method="POST"
+        onsubmit="return confirm('Supprimer ce devis ?')">
+    <button type="submit" class="btn-admin-danger"><i class="fa fa-trash"></i></button>
+  </form>
+</div>
+
+<div class="detail-layout">
+  <div class="detail-main">
+
+    <!-- Infos client -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-user"></i> Informations client</h3>
+      <div class="info-grid">
+        <div class="ig-item"><label>Nom</label><span><%= devis.nom %></span></div>
+        <div class="ig-item"><label>Email</label><a href="mailto:<%= devis.email %>" class="ig-link"><%= devis.email %></a></div>
+        <div class="ig-item"><label>Téléphone</label><span><%= devis.telephone || '—' %></span></div>
+        <div class="ig-item"><label>Entreprise</label><span><%= devis.entreprise || '—' %></span></div>
+      </div>
+    </div>
+
+    <!-- Détails envoi -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-box"></i> Détails de la demande</h3>
+      <div class="info-grid">
+        <div class="ig-item"><label>Service</label><span class="service-chip"><%= devis.typeService %></span></div>
+        <div class="ig-item"><label>Poids / Volume</label><span><%= devis.poids || '—' %></span></div>
+        <div class="ig-item"><label>Origine</label><span><%= devis.origine %></span></div>
+        <div class="ig-item"><label>Destination</label><span><%= devis.destination %></span></div>
+        <div class="ig-item"><label>Date d'expédition</label><span><%= devis.dateExpedition || '—' %></span></div>
+        <div class="ig-item"><label>Type de marchandise</label><span><%= devis.typeMarchandise || '—' %></span></div>
+        <% if (devis.urgent === 'oui') { %>
+        <div class="ig-item"><label>Urgent</label><span class="badge badge-red"><i class="fa fa-bolt"></i> Oui</span></div>
+        <% } %>
+        <% if (devis.assurance === 'oui') { %>
+        <div class="ig-item"><label>Assurance</label><span class="badge badge-green"><i class="fa fa-shield-halved"></i> Demandée</span></div>
+        <% } %>
+        <% if (devis.description) { %>
+        <div class="ig-item ig-full"><label>Description</label><span><%= devis.description %></span></div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Note interne -->
+    <% if (devis.noteInterne) { %>
+    <div class="detail-card detail-card-note">
+      <h3 class="dc-title"><i class="fa fa-sticky-note"></i> Note interne</h3>
+      <p><%= devis.noteInterne %></p>
+    </div>
+    <% } %>
+
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="detail-sidebar">
+
+    <!-- Mettre à jour statut -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-pen-to-square"></i> Traiter le devis</h3>
+      <form action="/admin/devis/<%= devis.id %>/statut" method="POST" class="status-form">
+        <div class="sf-group">
+          <label>Statut</label>
+          <select name="statut">
+            <% ['En attente','En cours','Traité','Refusé'].forEach(s => { %>
+            <option value="<%= s %>" <%= devis.statut===s?'selected':'' %>><%= s %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="sf-group">
+          <label>Montant proposé</label>
+          <input type="text" name="montantPropose" value="<%= devis.montantPropose || '' %>" placeholder="Ex: 850 000 FCFA"/>
+        </div>
+        <div class="sf-group">
+          <label>Note interne</label>
+          <textarea name="noteInterne" rows="3" placeholder="Notes visibles uniquement par l'équipe..."><%= devis.noteInterne || '' %></textarea>
+        </div>
+        <button type="submit" class="btn-admin-primary btn-block"><i class="fa fa-check"></i> Enregistrer</button>
+      </form>
+    </div>
+
+    <!-- Résumé -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-info-circle"></i> Résumé</h3>
+      <ul class="summary-list">
+        <li><span>Reçu le</span><strong><%= new Date(devis.createdAt).toLocaleDateString('fr-FR') %></strong></li>
+        <li><span>Statut</span><span class="badge <%= dc %>"><%= devis.statut %></span></li>
+        <% if (devis.montantPropose) { %><li><span>Montant</span><strong class="montant"><%= devis.montantPropose %></strong></li><% } %>
+      </ul>
+    </div>
+
+    <!-- Actions -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-bolt"></i> Actions rapides</h3>
+      <div class="quick-actions">
+        <a href="mailto:<%= devis.email %>?subject=Votre devis Logistic Express Gabon"
+           class="qa-btn"><i class="fa fa-reply"></i> Répondre par email</a>
+        <a href="/admin/colis/new" class="qa-btn"><i class="fa fa-box"></i> Créer un colis</a>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<%- include('partials/layout-bottom') %>

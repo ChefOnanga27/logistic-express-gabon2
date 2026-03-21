@@ -1,0 +1,157 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <a href="/admin/colis" class="btn-admin-ghost btn-sm"><i class="fa fa-arrow-left"></i> Retour</a>
+    <h2 class="page-title"><i class="fa fa-box"></i> <code><%= colis.numero %></code></h2>
+    <%- statusBadge(colis.statut) %>
+  </div>
+  <form action="/admin/colis/<%= colis.id %>/delete" method="POST"
+        onsubmit="return confirm('Supprimer ce colis définitivement ?')">
+    <button type="submit" class="btn-admin-danger"><i class="fa fa-trash"></i> Supprimer</button>
+  </form>
+</div>
+
+<div class="detail-layout">
+
+  <!-- Colonne principale -->
+  <div class="detail-main">
+
+    <!-- Infos client -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-user"></i> Informations client</h3>
+      <div class="info-grid">
+        <div class="ig-item"><label>Client</label><span><%= colis.client %></span></div>
+        <div class="ig-item"><label>Email</label><a href="mailto:<%= colis.email %>" class="ig-link"><%= colis.email %></a></div>
+        <div class="ig-item"><label>Téléphone</label><a href="tel:<%= colis.telephone %>" class="ig-link"><%= colis.telephone || '—' %></a></div>
+        <div class="ig-item"><label>Service</label><span><%= colis.service %></span></div>
+        <div class="ig-item"><label>Poids / Volume</label><span><%= colis.poids || '—' %></span></div>
+        <div class="ig-item"><label>Livraison prévue</label>
+          <span class="<%= colis.dateLivraison && new Date(colis.dateLivraison) < new Date() && colis.statut !== 'Livré' ? 'date-late' : '' %>">
+            <%= colis.dateLivraison ? new Date(colis.dateLivraison).toLocaleDateString('fr-FR') : '—' %>
+          </span>
+        </div>
+        <div class="ig-item ig-full"><label>Description</label><span><%= colis.description || '—' %></span></div>
+      </div>
+    </div>
+
+    <!-- Trajet -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-route"></i> Trajet</h3>
+      <div class="trajet-visual">
+        <div class="tv-point tv-origin">
+          <div class="tvp-dot tvp-dot-blue"></div>
+          <div><label>Origine</label><strong><%= colis.origine %></strong></div>
+        </div>
+        <div class="tv-line"></div>
+        <div class="tv-point tv-dest">
+          <div class="tvp-dot tvp-dot-green"></div>
+          <div><label>Destination</label><strong><%= colis.destination %></strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="detail-card">
+      <div class="dc-header-row">
+        <h3 class="dc-title"><i class="fa fa-map-pin"></i> Historique du trajet</h3>
+        <button class="btn-admin-secondary btn-sm" onclick="toggleModal('addEtapeModal')">
+          <i class="fa fa-plus"></i> Ajouter une étape
+        </button>
+      </div>
+      <div class="admin-timeline">
+        <% (colis.etapes || []).forEach((e, idx) => { %>
+        <div class="atl-step <%= e.done ? 'atl-done' : 'atl-current' %>">
+          <div class="atl-dot">
+            <% if (e.done) { %><i class="fa fa-check"></i>
+            <% } else { %><i class="fa fa-circle-dot"></i><% } %>
+          </div>
+          <div class="atl-content">
+            <strong><%= e.lieu %></strong>
+            <span><%= e.date %></span>
+          </div>
+        </div>
+        <% }) %>
+        <% if (!colis.etapes || colis.etapes.length === 0) { %>
+        <p class="tbl-empty">Aucune étape enregistrée.</p>
+        <% } %>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="detail-sidebar">
+
+    <!-- Changer statut -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-circle-half-stroke"></i> Changer le statut</h3>
+      <form action="/admin/colis/<%= colis.id %>/statut" method="POST" class="status-form">
+        <select name="statut" class="status-select">
+          <% ['En attente','En transit','En livraison','Livré','Retard','Annulé'].forEach(s => { %>
+          <option value="<%= s %>" <%= colis.statut===s ? 'selected' : '' %>><%= s %></option>
+          <% }) %>
+        </select>
+        <button type="submit" class="btn-admin-primary btn-block">
+          <i class="fa fa-check"></i> Mettre à jour
+        </button>
+      </form>
+    </div>
+
+    <!-- Résumé -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-info-circle"></i> Résumé</h3>
+      <ul class="summary-list">
+        <li><span>N° de suivi</span><code class="code-num"><%= colis.numero %></code></li>
+        <li><span>Créé le</span><strong><%= new Date(colis.createdAt).toLocaleDateString('fr-FR') %></strong></li>
+        <li><span>Étapes</span><strong><%= (colis.etapes||[]).length %></strong></li>
+        <li><span>Étapes complètes</span><strong><%= (colis.etapes||[]).filter(e=>e.done).length %></strong></li>
+      </ul>
+    </div>
+
+    <!-- Lien suivi public -->
+    <div class="detail-card">
+      <h3 class="dc-title"><i class="fa fa-share-nodes"></i> Lien de suivi client</h3>
+      <p class="dc-hint">Partagez ce lien avec votre client pour qu'il puisse suivre son colis.</p>
+      <div class="copy-box">
+        <input type="text" id="trackingLink" value="/suivi" readonly/>
+        <button onclick="copyLink()" class="copy-btn"><i class="fa fa-copy"></i></button>
+      </div>
+      <p class="copy-hint">Numéro : <strong><%= colis.numero %></strong></p>
+    </div>
+
+  </aside>
+</div>
+
+<!-- Modal ajouter étape -->
+<div class="modal-overlay" id="addEtapeModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3><i class="fa fa-map-pin"></i> Ajouter une étape</h3>
+      <button onclick="toggleModal('addEtapeModal')"><i class="fa fa-xmark"></i></button>
+    </div>
+    <form action="/admin/colis/<%= colis.id %>/etape" method="POST" class="modal-form">
+      <div class="mf-group">
+        <label>Lieu *</label>
+        <input type="text" name="lieu" required placeholder="Ex: Port d'Owendo – Arrivée"/>
+      </div>
+      <div class="mf-group">
+        <label>Date et heure</label>
+        <input type="text" name="date" placeholder="Ex: 20 Mars 2026 14:00"/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="toggleModal('addEtapeModal')" class="btn-cancel">Annuler</button>
+        <button type="submit" class="btn-admin-primary"><i class="fa fa-plus"></i> Ajouter l'étape</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function copyLink() {
+  navigator.clipboard.writeText('/suivi — N° : <%= colis.numero %>');
+  document.querySelector('.copy-btn').innerHTML = '<i class="fa fa-check"></i>';
+}
+</script>
+
+<%- include('partials/layout-bottom') %>

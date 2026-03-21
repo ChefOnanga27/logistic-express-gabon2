@@ -1,0 +1,167 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <h2 class="page-title"><i class="fa fa-at"></i> Newsletter & Abonnés</h2>
+    <div class="pt-stats">
+      <span class="pts-item pts-total"><strong><%= total %></strong> total</span>
+      <span class="pts-item pts-green"><strong><%= actifs %></strong> actifs</span>
+      <span class="pts-item pts-gray"><strong><%= inactifs %></strong> inactifs</span>
+    </div>
+  </div>
+  <div class="pt-right">
+    <a href="/admin/newsletter/campagne" class="btn-admin-primary"><i class="fa fa-paper-plane"></i> Envoyer une campagne</a>
+    <button class="btn-admin-secondary" onclick="toggleModal('addSubModal')"><i class="fa fa-plus"></i> Ajouter un abonné</button>
+  </div>
+</div>
+
+<!-- Alertes -->
+<% if (typeof query !== 'undefined' && query.success === 'added') { %>
+<div class="alert-success-bar"><i class="fa fa-check-circle"></i> Abonné ajouté avec succès.</div>
+<% } %>
+<% if (typeof query !== 'undefined' && query.campagne === 'sent') { %>
+<div class="alert-success-bar"><i class="fa fa-check-circle"></i> Campagne envoyée à <%= query.count %> abonnés.</div>
+<% } %>
+
+<!-- Filtres -->
+<div class="filter-bar">
+  <form action="/admin/newsletter" method="GET" class="filter-form">
+    <div class="filter-search">
+      <i class="fa fa-search"></i>
+      <input type="text" name="q" value="<%= q %>" placeholder="Rechercher email, nom..." />
+    </div>
+    <select name="statut" onchange="this.form.submit()">
+      <option value="">Tous les statuts</option>
+      <option value="actif"   <%= filtreStatut==='actif'   ?'selected':'' %>>Actifs</option>
+      <option value="inactif" <%= filtreStatut==='inactif' ?'selected':'' %>>Inactifs</option>
+    </select>
+    <button type="submit" class="btn-filter"><i class="fa fa-filter"></i> Filtrer</button>
+    <a href="/admin/newsletter" class="btn-reset"><i class="fa fa-xmark"></i></a>
+  </form>
+</div>
+
+<!-- Table -->
+<div class="table-card">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th><input type="checkbox" id="checkAll" onclick="toggleAll(this)"/></th>
+        <th>Abonné</th>
+        <th>Email</th>
+        <th>Source</th>
+        <th>Date d'inscription</th>
+        <th>Statut</th>
+        <th class="th-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (subscribers.length === 0) { %>
+      <tr><td colspan="7" class="tbl-empty"><i class="fa fa-inbox"></i> Aucun abonné trouvé</td></tr>
+      <% } %>
+      <% subscribers.forEach(s => { %>
+      <tr>
+        <td><input type="checkbox" class="row-check" value="<%= s.id %>"/></td>
+        <td>
+          <div class="tbl-user">
+            <div class="tbl-avatar"><%= (s.nom || s.email).split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() %></div>
+            <span><%= s.nom || '—' %></span>
+          </div>
+        </td>
+        <td><a href="mailto:<%= s.email %>" class="tbl-email"><%= s.email %></a></td>
+        <td><span class="source-badge"><%= s.source || 'newsletter' %></span></td>
+        <td class="tbl-date"><%= new Date(s.createdAt).toLocaleDateString('fr-FR') %></td>
+        <td>
+          <% if (s.statut === 'actif') { %>
+          <span class="badge badge-green"><i class="fa fa-circle"></i> Actif</span>
+          <% } else { %>
+          <span class="badge badge-gray"><i class="fa fa-circle"></i> Inactif</span>
+          <% } %>
+        </td>
+        <td>
+          <div class="tbl-actions">
+            <form action="/admin/newsletter/toggle/<%= s.id %>" method="POST" style="display:inline;">
+              <button type="submit" class="tbl-btn <%= s.statut==='actif' ? 'tbl-btn-gray' : 'tbl-btn-green' %>"
+                      title="<%= s.statut==='actif' ? 'Désactiver' : 'Activer' %>">
+                <i class="fa fa-<%= s.statut==='actif' ? 'toggle-on' : 'toggle-off' %>"></i>
+              </button>
+            </form>
+            <form action="/admin/newsletter/delete/<%= s.id %>" method="POST" style="display:inline;"
+                  onsubmit="return confirm('Supprimer cet abonné ?')">
+              <button type="submit" class="tbl-btn tbl-btn-red" title="Supprimer">
+                <i class="fa fa-trash"></i>
+              </button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<!-- Résumé graphique -->
+<div class="dash-card" style="margin-top:24px;">
+  <div class="dc-header"><h3><i class="fa fa-chart-pie"></i> Répartition des abonnés</h3></div>
+  <div class="sub-chart-row">
+    <div class="sub-donut-wrap">
+      <canvas id="subDonut" width="160" height="160"></canvas>
+      <div class="donut-center"><strong><%= actifs %></strong><span>actifs</span></div>
+    </div>
+    <div class="sub-stats-list">
+      <div class="ssl-item"><span class="ssl-dot" style="background:var(--a-green);"></span><span>Actifs</span><strong><%= actifs %></strong><span class="ssl-pct"><%= total > 0 ? Math.round(actifs/total*100) : 0 %>%</span></div>
+      <div class="ssl-item"><span class="ssl-dot" style="background:#e5e7eb;"></span><span>Inactifs</span><strong><%= inactifs %></strong><span class="ssl-pct"><%= total > 0 ? Math.round(inactifs/total*100) : 0 %>%</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal ajouter abonné -->
+<div class="modal-overlay" id="addSubModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3><i class="fa fa-user-plus"></i> Ajouter un abonné</h3>
+      <button onclick="toggleModal('addSubModal')"><i class="fa fa-xmark"></i></button>
+    </div>
+    <form action="/admin/newsletter/add" method="POST" class="modal-form">
+      <div class="mf-group">
+        <label>Email *</label>
+        <input type="email" name="email" required placeholder="email@exemple.com"/>
+      </div>
+      <div class="mf-group">
+        <label>Nom</label>
+        <input type="text" name="nom" placeholder="Nom complet (optionnel)"/>
+      </div>
+      <div class="mf-group">
+        <label>Source</label>
+        <select name="source">
+          <option value="admin">Ajout manuel</option>
+          <option value="newsletter">Newsletter</option>
+          <option value="contact">Contact</option>
+          <option value="devis">Devis</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="toggleModal('addSubModal')" class="btn-cancel">Annuler</button>
+        <button type="submit" class="btn-admin-primary"><i class="fa fa-plus"></i> Ajouter</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+const ctx = document.getElementById('subDonut').getContext('2d');
+new Chart(ctx, {
+  type: 'doughnut',
+  data: {
+    datasets: [{
+      data: [<%= actifs %>, <%= inactifs %>],
+      backgroundColor: ['#10b981', '#e5e7eb'],
+      borderWidth: 0,
+      cutout: '72%',
+    }],
+  },
+  options: { responsive: false, plugins: { legend: { display: false } } },
+});
+</script>
+
+<%- include('partials/layout-bottom') %>

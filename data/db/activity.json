@@ -1,0 +1,23 @@
+[
+  {
+    "id": "7b37cabf-7e36-4037-99b5-df68a44299fc",
+    "createdAt": "2026-03-21T07:41:38.587Z",
+    "type": "colis",
+    "action": "Colis supprimé : LEG-2026-08410",
+    "user": "Alphonse Minko"
+  },
+  {
+    "id": "1abd0d8f-ac1f-4a4a-b87c-e64d56a03b4e",
+    "createdAt": "2026-03-21T07:41:26.154Z",
+    "type": "colis",
+    "action": "Colis supprimé : LEG-2026-08502",
+    "user": "Alphonse Minko"
+  },
+  {
+    "id": "8af8e3f3-1d9f-4f3d-a695-8917d19494a6",
+    "createdAt": "2026-03-21T07:38:28.041Z",
+    "type": "auth",
+    "action": "Connexion de Alphonse Minko",
+    "user": "Alphonse Minko"
+  }
+]

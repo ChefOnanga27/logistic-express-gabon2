@@ -1,0 +1,11 @@
+[
+  {
+    "id": "87a3522f-6318-47de-a4eb-81263fb57816",
+    "createdAt": "2026-03-21T07:37:48.699Z",
+    "username": "admin",
+    "password": "$2a$10$JAnaU5b.tuUWXZbqNfo6hugHTTra2gm8Vk8OwGU4.e6VM8LTIqfS2",
+    "nom": "Alphonse Minko",
+    "role": "super_admin",
+    "email": "admin@logistic-express-gabon.ga"
+  }
+]

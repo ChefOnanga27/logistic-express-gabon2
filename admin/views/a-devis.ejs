@@ -1,0 +1,99 @@
+<%- include('partials/layout-top') %>
+
+<div class="page-toolbar">
+  <div class="pt-left">
+    <h2 class="page-title"><i class="fa fa-file-invoice"></i> Demandes de Devis</h2>
+    <div class="pt-stats">
+      <span class="pts-item pts-blue"  ><strong><%= total %></strong> total</span>
+      <span class="pts-item pts-yellow"><strong><%= enAttente %></strong> en attente</span>
+      <span class="pts-item pts-orange"><strong><%= enCours %></strong> en cours</span>
+      <span class="pts-item pts-green" ><strong><%= traites %></strong> traités</span>
+    </div>
+  </div>
+</div>
+
+<div class="status-tabs">
+  <a href="/admin/devis"                   class="stab <%= !filtreStatut ? 'stab-active' : '' %>">Tous</a>
+  <a href="/admin/devis?statut=En+attente" class="stab <%= filtreStatut==='En attente' ? 'stab-active' : '' %>"><span class="stab-dot stab-yellow"></span>En attente</a>
+  <a href="/admin/devis?statut=En+cours"   class="stab <%= filtreStatut==='En cours'   ? 'stab-active' : '' %>"><span class="stab-dot stab-blue"></span>En cours</a>
+  <a href="/admin/devis?statut=Trait%C3%A9" class="stab <%= filtreStatut==='Traité'    ? 'stab-active' : '' %>"><span class="stab-dot stab-green"></span>Traités</a>
+</div>
+
+<div class="filter-bar">
+  <form action="/admin/devis" method="GET" class="filter-form">
+    <div class="filter-search"><i class="fa fa-search"></i>
+      <input type="text" name="q" value="<%= q %>" placeholder="Rechercher nom, email, service..."/>
+    </div>
+    <% if (filtreStatut) { %><input type="hidden" name="statut" value="<%= filtreStatut %>"/><% } %>
+    <button type="submit" class="btn-filter"><i class="fa fa-search"></i></button>
+    <a href="/admin/devis" class="btn-reset"><i class="fa fa-xmark"></i></a>
+  </form>
+</div>
+
+<div class="table-card">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Client</th>
+        <th>Service demandé</th>
+        <th>Trajet</th>
+        <th>Reçu le</th>
+        <th>Montant proposé</th>
+        <th>Statut</th>
+        <th class="th-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (devis.length === 0) { %>
+      <tr><td colspan="7" class="tbl-empty"><i class="fa fa-file-circle-xmark"></i> Aucune demande de devis</td></tr>
+      <% } %>
+      <% devis.forEach(d => { %>
+      <tr>
+        <td>
+          <div class="tbl-user">
+            <div class="tbl-avatar"><%= d.nom.split(' ').map(w=>w[0]).join('').slice(0,2) %></div>
+            <div>
+              <span><%= d.nom %></span>
+              <small class="tbl-sub"><%= d.email %></small>
+            </div>
+          </div>
+        </td>
+        <td><span class="service-chip"><%= d.typeService %></span></td>
+        <td>
+          <div class="tbl-trajet">
+            <span><%= d.origine %></span>
+            <i class="fa fa-arrow-right traj-arrow"></i>
+            <span><%= d.destination %></span>
+          </div>
+        </td>
+        <td class="tbl-date"><%= new Date(d.createdAt).toLocaleDateString('fr-FR') %></td>
+        <td>
+          <% if (d.montantPropose) { %>
+          <strong class="montant"><%= d.montantPropose %></strong>
+          <% } else { %><span class="tbl-na">—</span><% } %>
+        </td>
+        <td>
+          <% const dc = {
+            'En attente': 'badge-yellow',
+            'En cours':   'badge-blue',
+            'Traité':     'badge-green',
+            'Refusé':     'badge-red'
+          }[d.statut] || 'badge-gray'; %>
+          <span class="badge <%= dc %>"><%= d.statut %></span>
+        </td>
+        <td>
+          <div class="tbl-actions">
+            <a href="/admin/devis/<%= d.id %>" class="tbl-btn tbl-btn-blue" title="Voir"><i class="fa fa-eye"></i></a>
+            <form action="/admin/devis/<%= d.id %>/delete" method="POST" style="display:inline;"
+                  onsubmit="return confirm('Supprimer ce devis ?')">
+              <button type="submit" class="tbl-btn tbl-btn-red"><i class="fa fa-trash"></i></button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('partials/layout-bottom') %>

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "806ae26d-16c8-4c7d-930e-7da17adf91d8",
+    "createdAt": "2026-03-21T07:37:48.718Z",
+    "nom": "Marc Essono",
+    "email": "marc.essono@hotmail.fr",
+    "telephone": "+241 065 12 34 56",
+    "objet": "Déménagement",
+    "message": "Je déménage de Libreville à Oyem le mois prochain. Pouvez-vous me faire une estimation pour un appartement T3 ?",
+    "lu": true,
+    "repondu": false
+  },
+  {
+    "id": "20a1302f-2a67-4502-ac88-984a7de6ec66",
+    "createdAt": "2026-03-21T07:37:48.717Z",
+    "nom": "Société Foresta",
+    "email": "contact@foresta-gabon.ga",
+    "telephone": "+241 011 77 88 99",
+    "objet": "Demande de partenariat",
+    "message": "Notre société est intéressée par un partenariat logistique annuel pour nos exportations de bois vers l'Europe. Pouvez-vous nous proposer une offre globale ?",
+    "lu": true,
+    "repondu": true
+  },
+  {
+    "id": "d9791b5a-0de6-4ba7-9a22-daeab6c7db71",
+    "createdAt": "2026-03-21T07:37:48.716Z",
+    "nom": "Carine Dupont",
+    "email": "carine.d@gmail.com",
+    "telephone": "",
+    "objet": "Réclamation",
+    "message": "Mon colis LEG-2026-08410 est en retard depuis 2 jours. Merci de m'informer rapidement de la situation.",
+    "lu": false,
+    "repondu": false
+  },
+  {
+    "id": "aeded572-138c-4969-98f7-c461cd935fb6",
+    "createdAt": "2026-03-21T07:37:48.715Z",
+    "nom": "Jean-Marie Obame",
+    "email": "jean.obame@olam.ga",
+    "telephone": "+241 074 11 22 33",
+    "objet": "Demande de renseignements",
+    "message": "Bonjour, je souhaite obtenir des informations sur vos tarifs pour le transport maritime entre Libreville et Port-Gentil pour des volumes importants.",
+    "lu": false,
+    "repondu": false
+  }
+]
