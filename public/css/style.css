@@ -231,7 +231,16 @@ ul { list-style: none; }
    ============================ */
 .why-section { background: var(--bg); }
 .why-inner { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: center; }
-.why-img-box { background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%); border-radius: var(--radius-lg); min-height: 420px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.why-img-box {
+  background: url('/images/about-logistics.jpeg') center center / cover no-repeat;
+  border-radius: var(--radius-lg);
+  min-height: 420px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .why-img-pattern { position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M20 20L0 0h40L20 20zm0 0L0 40h40L20 20z'/%3E%3C/g%3E%3C/svg%3E"); }
 .why-img-box::after { content: '\f0d1'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 8rem; color: rgba(245,197,24,0.12); position: absolute; }
 .why-badge-float { position: absolute; bottom: 28px; left: 28px; background: var(--primary-yellow); color: var(--primary-blue); padding: 12px 20px; border-radius: 12px; font-family: var(--font-display); font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 24px rgba(245,197,24,0.4); z-index: 2; }
@@ -255,39 +264,291 @@ ul { list-style: none; }
 .province-card span { font-size: 0.82rem; color: var(--text-muted); }
 
 /* ============================
-   GLOBAL COVERAGE / SOLAR ORBIT FLAGS
+/* ============================
+   GLOBAL COVERAGE SECTION
    ============================ */
-.global-coverage-section { background: linear-gradient(135deg, rgba(3, 34, 75, 0.85), rgba(0, 0, 0, 0.75)); color: white; position: relative; }
-.global-coverage-section::before { content: ''; position: absolute; inset: 0; background: rgba(3, 34, 75, 0.25); }
-.global-coverage-section .container { position: relative; z-index: 2; }
-.global-coverage-inner { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 20px 0 10px; }
-.global-coverage-text { flex: 1; min-width: 280px; max-width: 480px; color: white; }
-.global-coverage-text h3 { color: #fff; font-family: var(--font-display); font-size: 1.9rem; font-weight: 800; margin-bottom: 14px; }
-.global-coverage-text p { color: rgba(255,255,255,0.92); line-height: 1.6; margin-bottom: 14px; }
-.global-coverage-text ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
-.global-coverage-text ul li { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 10px 12px; color: #f0f8ff; font-size: 0.94rem; }
-.orbit-layout { flex: 1; min-width: 280px; max-width: 520px; position: relative; aspect-ratio: 1 / 1; display: grid; place-items: center; }
-.orbit-core { position: absolute; z-index: 4; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.flag-core { width: 90px; height: 90px; border-radius: 50%; display: grid; place-items: center; font-size: 2.8rem; background: rgba(255,255,255,0.92); color: #0f4e26; border: 3px solid #1a3a7c; box-shadow: 0 8px 24px rgba(0,0,0,0.28); }
-.orbit-core span { font-family: var(--font-display); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; font-size: 0.85rem; }
-.orbit { position: absolute; inset: 0; border-radius: 50%; border: 1px dashed rgba(255,255,255,0.35); }
-.orbit-1 { transform: scale(0.60); }
-.orbit-2 { transform: scale(0.74); }
-.orbit-3 { transform: scale(0.88); }
-.orbit-planet { position: absolute; width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.95); border: 1px solid rgba(26,58,124,0.2); display: grid; place-items: center; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.22); animation: spinPlanets 18s linear infinite; }
-.orbit-planet img { width: 100%; height: 100%; object-fit: cover; }
-.orbit-planet::after { content: attr(title); position: absolute; top: 70px; left: 50%; transform: translateX(-50%); font-size: 0.72rem; color: white; white-space: nowrap; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
-.p1 { transform: rotate(0deg) translateX(190px); animation-duration: 20s; }
-.p2 { transform: rotate(52deg) translateX(210px); animation-duration: 22s; }
-.p3 { transform: rotate(104deg) translateX(230px); animation-duration: 19s; }
-.p4 { transform: rotate(156deg) translateX(195px); animation-duration: 24s; }
-.p5 { transform: rotate(208deg) translateX(215px); animation-duration: 21s; }
-.p6 { transform: rotate(260deg) translateX(235px); animation-duration: 23s; }
-.p7 { transform: rotate(312deg) translateX(250px); animation-duration: 25s; }
+.global-coverage-section {
+  background: var(--primary-blue);
+  position: relative;
+  overflow: hidden;
+}
 
-@keyframes spinPlanets {
-  0% { transform: rotate(0deg) translateX(var(--orbit-distance)) rotate(0deg); }
-  100% { transform: rotate(360deg) translateX(var(--orbit-distance)) rotate(-360deg); }
+.global-coverage-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 60% at 80% 50%, rgba(43,127,212,0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 10% 80%, rgba(245,197,24,0.06) 0%, transparent 60%);
+}
+
+.global-coverage-section .section-header { position: relative; z-index: 1; }
+.global-coverage-section .section-header h2 { color: white; }
+.global-coverage-section .section-header p  { color: rgba(255,255,255,0.70); }
+.global-coverage-section .section-badge {
+  background: rgba(245,197,24,0.18);
+  color: var(--primary-yellow);
+}
+
+/* Layout 2 colonnes */
+.global-coverage-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Colonne texte ── */
+.global-coverage-text { }
+
+.gct-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245,197,24,0.15);
+  border: 1px solid rgba(245,197,24,0.35);
+  color: var(--primary-yellow);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 30px;
+  margin-bottom: 18px;
+}
+
+.global-coverage-text h3 {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.global-coverage-text > p {
+  color: rgba(255,255,255,0.70);
+  font-size: 0.97rem;
+  line-height: 1.75;
+  margin-bottom: 28px;
+}
+
+/* Liste partenaires */
+.partners-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.partners-list li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px;
+  padding: 10px 16px;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.partners-list li:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(245,197,24,0.30);
+}
+
+.partners-list li img {
+  width: 36px;
+  height: 24px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  flex-shrink: 0;
+}
+
+.partners-list li strong {
+  display: block;
+  color: white;
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 1px;
+}
+
+.partners-list li span {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.55);
+}
+
+/* ── Colonne orbite ── */
+.orbit-layout {
+  position: relative;
+  width: 420px;
+  height: 420px;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+
+/* Cercles orbitaux */
+.orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px dashed rgba(255,255,255,0.12);
+  pointer-events: none;
+}
+.orbit-1 { width: 160px; height: 160px; border-color: rgba(245,197,24,0.20); }
+.orbit-2 { width: 270px; height: 270px; }
+.orbit-3 { width: 390px; height: 390px; border-color: rgba(43,127,212,0.25); }
+
+/* Centre Gabon */
+.orbit-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 5;
+}
+
+.flag-core {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--primary-yellow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 4px rgba(245,197,24,0.25),
+    0 0 0 8px rgba(245,197,24,0.10),
+    0 8px 28px rgba(0,0,0,0.35);
+}
+
+.flag-core img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.orbit-core span {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--primary-yellow);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Planètes orbitales */
+.orbit-planet {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  cursor: default;
+}
+
+.orbit-planet img {
+  width: 42px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.40);
+  border: 2px solid rgba(255,255,255,0.20);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.orbit-planet:hover img {
+  transform: scale(1.15);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+  border-color: var(--primary-yellow);
+}
+
+.orbit-planet span {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.60);
+  font-family: var(--font-display);
+  letter-spacing: 0.5px;
+}
+
+/* Positions planètes — réparties sur 360° */
+.p1 { top:  5%;  left: 50%; }   /* haut */
+.p2 { top: 18%;  left: 82%; }   /* haut-droite */
+.p3 { top: 50%;  left: 96%; }   /* droite */
+.p4 { top: 82%;  left: 82%; }   /* bas-droite */
+.p5 { top: 95%;  left: 50%; }   /* bas */
+.p6 { top: 82%;  left: 18%; }   /* bas-gauche */
+.p7 { top: 18%;  left: 18%; }   /* haut-gauche */
+
+/* Animations rotation */
+@keyframes orbitSpin {
+  from { transform: translate(-50%, -50%) rotate(0deg) translateX(var(--r)) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg) translateX(var(--r)) rotate(-360deg); }
+}
+
+.p1 { --r: 135px; top: 50%; left: 50%; animation: orbitSpin 18s linear infinite; animation-delay: 0s; }
+.p2 { --r: 135px; top: 50%; left: 50%; animation: orbitSpin 18s linear infinite; animation-delay: -2.57s; }
+.p3 { --r: 135px; top: 50%; left: 50%; animation: orbitSpin 18s linear infinite; animation-delay: -5.14s; }
+.p4 { --r: 135px; top: 50%; left: 50%; animation: orbitSpin 18s linear infinite; animation-delay: -7.71s; }
+.p5 { --r: 135px; top: 50%; left: 50%; animation: orbitSpin 18s linear infinite; animation-delay: -10.28s; }
+.p6 { --r: 135px; top: 50%; left: 50%; animation: orbitSpin 18s linear infinite; animation-delay: -12.85s; }
+.p7 { --r: 135px; top: 50%; left: 50%; animation: orbitSpin 18s linear infinite; animation-delay: -15.42s; }
+
+/* Stats flottantes */
+.orbit-stat {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(26,58,124,0.85);
+  border: 1px solid rgba(245,197,24,0.35);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  padding: 8px 18px;
+  text-align: center;
+  z-index: 6;
+  white-space: nowrap;
+}
+.os-top    { top:  -24px; }
+.os-bottom { bottom: -24px; }
+
+.orbit-stat strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--primary-yellow);
+}
+.orbit-stat span {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.60);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .global-coverage-inner { grid-template-columns: 1fr; gap: 40px; }
+  .orbit-layout { width: 320px; height: 320px; }
+  .orbit-planet { width: 40px; height: 40px; }
+  .flag-core { width: 60px; height: 60px; }
+  .orbit-stat { padding: 6px 14px; }
+  .orbit-stat strong { font-size: 1rem; }
+  .orbit-stat span { font-size: 0.62rem; }
 }
 
 /* Per-planet custom orbit distance for keyframe use */

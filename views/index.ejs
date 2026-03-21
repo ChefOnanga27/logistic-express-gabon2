@@ -161,7 +161,7 @@
   </div>
 </section>
 
-<!-- Services -->
+<<!-- Services -->
 <section class="section services-section">
   <div class="container">
     <div class="section-header">
@@ -169,28 +169,42 @@
       <h2>Nos Services Logistiques</h2>
       <p>Une gamme complète de solutions de transport adaptées aux besoins des entreprises et des particuliers.</p>
     </div>
+
+    <% const serviceImages = {
+      'achat-international':      '/images/achat.jpg',
+      'reception-colis':          '/images/reception.jpg',
+      'consolidation':            '/images/consolidation.jpg',
+      'transport-international':  '/images/transport.jpg',
+      'dedouanement':             '/images/douane.jpg',
+      'assistance-douane':        '/images/assistance.jpg',
+      'livraison-locale':         '/images/livraison.jpg',
+      'suivi-colis':              '/images/suivi.jpg',
+      'paiement-reception':       '/images/paiement.jpg'
+    }; %>
+
     <div class="services-grid">
-      <% const serviceImages = {
-           'transport-routier': '/images/service-road.jpg',
-           'transport-maritime': '/images/service-ocean.jpg',
-           'transport-aerien': '/images/service-air.jpg',
-           'entreposage': '/images/service-warehouse.jpg'
-         };
-      %>
       <% services.forEach((s, i) => { %>
-      <div class="service-card <%= i === 1 ? 'featured' : '' %>">
-        <div class="service-card-image" style="background-image:url('<%= serviceImages[s.slug] || '/images/hero-logistics.jpg' %>')"></div>
-        <div class="service-icon" style="<%= i !== 1 ? 'background:' + s.color + '18; color:' + s.color + ';' : '' %>">
-          <i class="fa <%= s.icon %>"></i>
+        <% const serviceImage    = serviceImages[s.slug] || '/images/hero-logistics.jpg'; %>
+        <% const serviceIconStyle = i !== 1 ? 'background:' + s.color + '18; color:' + s.color + ';' : ''; %>
+
+        <div class="service-card <%= i === 1 ? 'featured' : '' %>">
+          <div class="service-card-image" style="background-image: url('<%= serviceImage %>')"></div>
+          <div class="service-icon" style="<%= serviceIconStyle %>">
+            <i class="fa <%= s.icon %>"></i>
+          </div>
+          <h3><%= s.titre %></h3>
+          <p><%= s.accroche %></p>
+          <a href="/services/<%= s.slug %>" class="service-link">
+            En savoir plus <i class="fa fa-arrow-right"></i>
+          </a>
         </div>
-        <h3><%= s.titre %></h3>
-        <p><%= s.accroche %></p>
-        <a href="/services/<%= s.slug %>" class="service-link">En savoir plus <i class="fa fa-arrow-right"></i></a>
-      </div>
       <% }) %>
     </div>
+
     <div class="services-cta-center">
-      <a href="/services" class="btn btn-primary"><i class="fa fa-grid-2"></i> Voir tous nos services</a>
+      <a href="/services" class="btn btn-primary">
+        <i class="fa fa-grid-2"></i> Voir tous nos services
+      </a>
     </div>
   </div>
 </section>
@@ -262,44 +276,133 @@
 </section>
 
 <!-- International coverage -->
+<!-- Couverture Internationale -->
 <section class="section global-coverage-section">
   <div class="container">
+
     <div class="section-header">
-      <span class="section-badge">Couverture Monde</span>
-      <h2>Couverture Internationale</h2>
-      <p>Nos interconnexions sont activées avec les principaux hubs logistiques du monde. Voici nos pays partenaires tournant autour du Gabon.</p>
+      <span class="section-badge">Couverture Mondiale</span>
+      <h2>Notre Réseau International</h2>
+      <p>Depuis Libreville, nous connectons le Gabon aux grands pôles logistiques mondiaux. Expéditions fiables vers 150+ destinations.</p>
     </div>
 
     <div class="global-coverage-inner">
-      <div class="global-coverage-text">
-        <h3>Interconnexion mondiale</h3>
-        <p>Notre réseau couvre les principaux pôles logistiques internationaux. Les drapeaux représentant nos pays partenaires tournent autour du Gabon, symbolisant la fluidité et la fiabilité de nos corridors cargo.</p>
-        <ul>
-          <li>Chine - Importation d'équipements et composants</li>
-          <li>Turquie - Connexions industrielles et textiles</li>
-          <li>France - Logistique franco-gabonaise</li>
-          <li>Maroc - Hub africain pour la distribution</li>
-          <li>Tunisie - Flux commerciaux méditerranéens</li>
-          <li>Corée - Fret technologique et électronique</li>
-        </ul>
-      </div>
-      <div class="orbit-layout">
-        <div class="orbit-core">
-          <div class="flag-core">🇬🇦</div>
-          <span>Gabon</span>
-        </div>
 
+      <!-- Texte gauche -->
+      <div class="global-coverage-text">
+        <div class="gct-label">
+          <i class="fa fa-globe-africa"></i>
+          Interconnexion mondiale
+        </div>
+        <h3>Le Gabon au cœur des flux logistiques mondiaux</h3>
+        <p>Notre réseau de partenaires couvre les principaux corridors cargo internationaux. Chaque pays partenaire représente une route active d'import ou d'export opérée par nos équipes.</p>
+
+        <ul class="partners-list">
+          <li>
+            <img src="https://flagcdn.com/w40/cn.png" alt="Chine">
+            <div>
+              <strong>Chine</strong>
+              <span>Équipements, électronique, composants industriels</span>
+            </div>
+          </li>
+          <li>
+            <img src="https://flagcdn.com/w40/fr.png" alt="France">
+            <div>
+              <strong>France</strong>
+              <span>Logistique franco-gabonaise, produits de grande consommation</span>
+            </div>
+          </li>
+          <li>
+            <img src="https://flagcdn.com/w40/tr.png" alt="Turquie">
+            <div>
+              <strong>Turquie</strong>
+              <span>Textiles, matériaux de construction, industrie</span>
+            </div>
+          </li>
+          <li>
+            <img src="https://flagcdn.com/w40/ma.png" alt="Maroc">
+            <div>
+              <strong>Maroc</strong>
+              <span>Hub africain, distribution régionale</span>
+            </div>
+          </li>
+          <li>
+            <img src="https://flagcdn.com/w40/ae.png" alt="Émirats">
+            <div>
+              <strong>Émirats Arabes Unis</strong>
+              <span>Fret aérien, hub de transit Moyen-Orient</span>
+            </div>
+          </li>
+          <li>
+            <img src="https://flagcdn.com/w40/kr.png" alt="Corée">
+            <div>
+              <strong>Corée du Sud</strong>
+              <span>Technologies, électronique, véhicules</span>
+            </div>
+          </li>
+        </ul>
+
+        <a href="/devis" class="btn btn-primary">
+          <i class="fa fa-paper-plane"></i> Expédier vers ces destinations
+        </a>
+      </div>
+
+      <!-- Orbite droite -->
+      <div class="orbit-layout">
+
+        <!-- Orbites cercles décoratifs -->
         <div class="orbit orbit-1"></div>
         <div class="orbit orbit-2"></div>
         <div class="orbit orbit-3"></div>
 
-        <div class="orbit-planet p1" title="Chine"><img src="https://flagcdn.com/w40/cn.png" alt="Chine"></div>
-        <div class="orbit-planet p2" title="Turquie"><img src="https://flagcdn.com/w40/tr.png" alt="Turquie"></div>
-        <div class="orbit-planet p3" title="France"><img src="https://flagcdn.com/w40/fr.png" alt="France"></div>
-        <div class="orbit-planet p4" title="Maroc"><img src="https://flagcdn.com/w40/ma.png" alt="Maroc"></div>
-        <div class="orbit-planet p5" title="Tunisie"><img src="https://flagcdn.com/w40/tn.png" alt="Tunisie"></div>
-        <div class="orbit-planet p6" title="Corée"><img src="https://flagcdn.com/w40/kr.png" alt="Corée"></div>
-        <div class="orbit-planet p7" title="Émirats arabes unis"><img src="https://flagcdn.com/w40/ae.png" alt="Émirats arabes unis"></div>
+        <!-- Centre — Gabon -->
+        <div class="orbit-core">
+          <div class="flag-core">
+            <img src="https://flagcdn.com/w80/ga.png" alt="Gabon">
+          </div>
+          <span>Gabon</span>
+        </div>
+
+        <!-- Planètes orbitales -->
+        <div class="orbit-planet p1" title="Chine">
+          <img src="https://flagcdn.com/w40/cn.png" alt="Chine">
+          <span>CN</span>
+        </div>
+        <div class="orbit-planet p2" title="France">
+          <img src="https://flagcdn.com/w40/fr.png" alt="France">
+          <span>FR</span>
+        </div>
+        <div class="orbit-planet p3" title="Turquie">
+          <img src="https://flagcdn.com/w40/tr.png" alt="Turquie">
+          <span>TR</span>
+        </div>
+        <div class="orbit-planet p4" title="Maroc">
+          <img src="https://flagcdn.com/w40/ma.png" alt="Maroc">
+          <span>MA</span>
+        </div>
+        <div class="orbit-planet p5" title="Émirats">
+          <img src="https://flagcdn.com/w40/ae.png" alt="Émirats">
+          <span>AE</span>
+        </div>
+        <div class="orbit-planet p6" title="Corée">
+          <img src="https://flagcdn.com/w40/kr.png" alt="Corée">
+          <span>KR</span>
+        </div>
+        <div class="orbit-planet p7" title="Tunisie">
+          <img src="https://flagcdn.com/w40/tn.png" alt="Tunisie">
+          <span>TN</span>
+        </div>
+
+        <!-- Stats flottantes -->
+        <div class="orbit-stat os-top">
+          <strong>150+</strong>
+          <span>destinations</span>
+        </div>
+        <div class="orbit-stat os-bottom">
+          <strong>24–72h</strong>
+          <span>délai express</span>
+        </div>
+
       </div>
     </div>
   </div>
@@ -351,8 +454,9 @@
     </div>
     <div class="blog-preview-grid">
       <% recentArticles.forEach((a, i) => { %>
+      <% const articleBgColor = a.image_color || '#1a2b4a'; %>
       <a href="/blog/<%= a.slug %>" class="blog-preview-card <%= i === 0 ? 'bp-featured' : '' %>">
-        <div class="bp-image" style="background:<%= a.image_color %>;">
+        <div class="bp-image" style="background:<%= articleBgColor %>;">
           <i class="fa <%= a.image_placeholder %>"></i>
           <span class="article-cat"><%= a.categorie %></span>
         </div>
