@@ -296,8 +296,30 @@ ul { list-style: none; }
 /* ============================
    PAGE HERO
    ============================ */
-.page-hero { position: relative; background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%); padding: 80px 0 60px; overflow: hidden; }
-.page-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 80% at 70% 50%, rgba(245,197,24,0.08) 0%, transparent 70%); }
+.page-hero {
+  position: relative;
+  padding: 80px 0 60px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(5, 10, 21, 0.75) 50%,
+      rgba(226, 229, 233, 0.82) 50%
+    ),
+    url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1600&q=80&auto=format&fit=crop')
+    center center / cover no-repeat;
+}
+
+.page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 50% 80% at 70% 50%,
+    rgba(245, 197, 24, 0.08) 0%,
+    transparent 70%
+  );
+}
 .page-hero-overlay { position: absolute; bottom: 0; left: 0; right: 0; height: 4px; background: var(--primary-yellow); }
 .page-hero-content { position: relative; z-index: 2; }
 .page-hero-content h1 { font-family: var(--font-display); font-size: 3rem; font-weight: 900; color: white; margin-bottom: 12px; }
